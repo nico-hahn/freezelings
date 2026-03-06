@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://lemmingspawner01"]
+
+[ext_resource type="Script" uid="uid://ca75qpm7we48w" path="res://scripts/entities/lemming_spawner.gd" id="1_spawner"]
+[ext_resource type="PackedScene" uid="uid://lemming01" path="res://scenes/entities/lemming.tscn" id="2_lemming"]
+
+[node name="LemmingSpawner" type="Node"]
+script = ExtResource("1_spawner")
+lemming_scene = ExtResource("2_lemming")
+

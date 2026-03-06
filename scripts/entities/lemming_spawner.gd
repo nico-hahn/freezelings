@@ -50,8 +50,12 @@ func _spawn_lemming() -> void:
 	_lemmings_container.add_child(lemming)
 
 	# Lemming initialisieren
-	var lemming_script = lemming as Lemming
+	var lemming_script: Lemming = lemming as Lemming
 	lemming_script.initialize(_entry_pos, _start_direction, _level_controller)
+
+	# Lemming-Signale mit LevelController verbinden (Schritt 11)
+	lemming_script.reached_exit.connect(_level_controller._on_lemming_reached_exit)
+	lemming_script.died.connect(_level_controller._on_lemming_died)
 
 	_spawned_count += 1
 	GameManager.on_lemming_spawned()

@@ -138,3 +138,18 @@ func get_entry_grid_pos() -> Vector2i:
 func get_exit_grid_pos() -> Vector2i:
 	return _exit_grid_pos
 
+
+## Aufgerufen wenn ein Lemming den Ausgang erreicht hat.
+## Verbunden in LemmingSpawner._spawn_lemming() für jede Lemming-Instanz.
+func _on_lemming_reached_exit(lemming: Lemming) -> void:
+	GameManager.on_lemming_saved()
+	lemming.queue_free()
+
+
+## Aufgerufen wenn ein Lemming gestorben ist.
+## Verbunden in LemmingSpawner._spawn_lemming() für jede Lemming-Instanz.
+func _on_lemming_died(lemming: Lemming) -> void:
+	GameManager.on_lemming_died()
+	lemming.queue_free()
+
+
