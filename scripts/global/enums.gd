@@ -3,6 +3,8 @@
 # Registriert als Autoload "Enums" in project.godot
 # Zugriff von überall: Enums.Direction.NORTH, Enums.GameState.PLAYING, etc.
 
+extends Node
+
 enum Direction {
 	NORTH,  ## Oben  (Vector2i: 0, -1)
 	EAST,   ## Rechts (Vector2i: 1, 0)
@@ -27,7 +29,7 @@ enum LemmingState {
 
 
 ## Gibt den Richtungsvektor für eine Richtung zurück.
-static func direction_to_vector(dir: Direction) -> Vector2i:
+func direction_to_vector(dir: Direction) -> Vector2i:
 	match dir:
 		Direction.NORTH: return Vector2i(0, -1)
 		Direction.EAST:  return Vector2i(1, 0)
@@ -37,7 +39,7 @@ static func direction_to_vector(dir: Direction) -> Vector2i:
 
 
 ## Gibt die entgegengesetzte Richtung zurück.
-static func opposite_direction(dir: Direction) -> Direction:
+func opposite_direction(dir: Direction) -> Direction:
 	match dir:
 		Direction.NORTH: return Direction.SOUTH
 		Direction.EAST:  return Direction.WEST
@@ -47,11 +49,10 @@ static func opposite_direction(dir: Direction) -> Direction:
 
 
 ## Gibt den Namen der Richtung als String zurück (z.B. für Objekt-IDs).
-static func direction_to_string(dir: Direction) -> String:
+func direction_to_string(dir: Direction) -> String:
 	match dir:
 		Direction.NORTH: return "north"
 		Direction.EAST:  return "east"
 		Direction.SOUTH: return "south"
 		Direction.WEST:  return "west"
 	return "unknown"
-

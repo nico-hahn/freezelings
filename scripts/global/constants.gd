@@ -3,6 +3,8 @@
 # Registriert als Autoload "Constants" in project.godot.
 # Zugriff: Constants.TILE_SIZE, Constants.DEFAULT_TICK_DURATION, etc.
 
+extends Node
+
 ## Größe eines Tiles in Pixeln. Muss mit dem TileSet übereinstimmen.
 const TILE_SIZE: int = 32
 
@@ -22,4 +24,3 @@ const SCENE_BLOCKER: String = "res://scenes/objects/blocker.tscn"
 
 ## Pfad zum Object-Definitions-Ordner
 const OBJECT_DEFINITIONS_PATH: String = "res://resources/object_definitions/"
-

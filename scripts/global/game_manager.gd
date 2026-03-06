@@ -80,6 +80,7 @@ func on_lemming_died() -> void:
 func on_lemming_spawned() -> void:
 	spawned_count += 1
 	lemming_counts_changed.emit(saved_count, dead_count, spawned_count, total_lemmings)
+	_check_win_loss()
 
 
 ## Prüft ob Win- oder Loss-Bedingung erfüllt ist.
