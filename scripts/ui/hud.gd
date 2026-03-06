@@ -94,7 +94,7 @@ func _on_lemming_counts_changed(saved: int, _dead: int, _spawned: int, total: in
 	_saved_label.text = "Gerettet: %d / %d" % [saved, total]
 
 
-func _on_game_state_changed(new_state: Enums.GameState) -> void:
+func _on_game_state_changed(_new_state: Enums.GameState) -> void:
 	# Pause-Overlay bei PLAYING/PAUSED steuert TickManager-Signale
 	# Bei LEVEL_COMPLETE / LEVEL_FAILED: game.gd zeigt End-Screen
 	pass

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://game01"]
+
+[ext_resource type="Script" uid="uid://dxiedu4vtxfct" path="res://scripts/game/game.gd" id="1_game"]
+[ext_resource type="PackedScene" uid="uid://hud01" path="res://scenes/ui/hud.tscn" id="2_hud"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_game")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = true
+
+[node name="LevelRoot" type="Node2D" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+

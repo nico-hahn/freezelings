@@ -5,8 +5,8 @@
 class_name LemmingSpawner
 extends Node
 
-## Szene des Lemmings (im Editor zuweisen oder per preload in _ready).
-@export var lemming_scene: PackedScene = preload("res://scenes/entities/lemming.tscn")
+## Szene des Lemmings (im Editor zuweisen – wird in Phase 3 gesetzt).
+@export var lemming_scene: PackedScene
 
 var _entry_pos: Vector2i
 var _spawn_interval: int
@@ -44,8 +44,7 @@ func _on_tick_happened(tick_number: int) -> void:
 
 func _spawn_lemming() -> void:
 	if lemming_scene == null:
-		push_error("LemmingSpawner: lemming_scene ist nicht gesetzt!")
-		return
+		return  # lemming_scene noch nicht gesetzt (wird in Phase 3 zugewiesen)
 
 	var lemming: Node2D = lemming_scene.instantiate() as Node2D
 	_lemmings_container.add_child(lemming)

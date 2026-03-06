@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://level01"]
+
+[ext_resource type="Script" uid="uid://b0gpav47qbmq8" path="res://scripts/level/level_controller.gd" id="1_lc"]
+[ext_resource type="Script" uid="uid://ca75qpm7we48w" path="res://scripts/entities/lemming_spawner.gd" id="2_spawner"]
+
+[sub_resource type="TileSet" id="TileSet_walls"]
+tile_size = Vector2i(32, 32)
+
+[node name="Level01" type="Node2D"]
+script = ExtResource("1_lc")
+total_lemmings = 5
+required_saved = 3
+spawn_interval = 3
+start_direction = 1
+starting_inventory = {}
+
+[node name="Walls" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_walls")
+tile_map_data = PackedByteArray()
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="EntryPoint" type="Marker2D" parent="Markers"]
+position = Vector2(64, 192)
+
+[node name="ExitPoint" type="Marker2D" parent="Markers"]
+position = Vector2(544, 192)
+
+[node name="LemmingSpawner" type="Node" parent="."]
+script = ExtResource("2_spawner")
+
+[node name="LemmingsContainer" type="Node2D" parent="."]
+
+[node name="PlacedObjectsContainer" type="Node2D" parent="."]
+

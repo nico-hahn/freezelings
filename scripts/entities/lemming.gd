@@ -12,6 +12,7 @@ extends Node2D
 signal reached_exit(lemming: Lemming)
 
 ## Emittiert wenn der Lemming stirbt (momentan nicht aktiv ausgelöst, für spätere Erweiterung).
+@warning_ignore("unused_signal")
 signal died(lemming: Lemming)
 
 var grid_pos: Vector2i
