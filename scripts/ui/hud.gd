@@ -1,8 +1,8 @@
 ## HUD
 # Verwaltet alle UI-Elemente während des Spiels:
 # - Inventar-Panel (platzierbare Objekte)
-# - Lemming-Zähler (gerettet/gesamt)
-# - Pause-Button und -Overlay
+# - Freezeling-Zähler (gerettet/gesamt) – Lemminge heißen gegenüber dem Spieler "Freezelings"
+# - Pause-Button
 # - Optional: Tick-Geschwindigkeit
 
 class_name HUD
@@ -15,7 +15,8 @@ signal object_selected(object_type: String)
 signal pause_toggled
 
 # Node-Referenzen (im Editor über @ oder $-Pfade setzen)
-@onready var _saved_label: Label = $TopBar/SavedLabel
+@onready var _total_label: Label = $TopBar/StatsContainer/TotalLabel
+@onready var _saved_label: Label = $TopBar/StatsContainer/SavedLabel
 @onready var _pause_button: Button = $BottomBar/PauseButton
 @onready var _inventory_panel: HBoxContainer = $BottomBar/InventoryPanel
 
@@ -88,7 +89,8 @@ func _on_pause_button_pressed() -> void:
 
 
 func _on_lemming_counts_changed(saved: int, _dead: int, _spawned: int, total: int) -> void:
-	_saved_label.text = "Gerettet: %d / %d" % [saved, total]
+	_total_label.text = "Total Freezelings: %d" % total
+	_saved_label.text = "Saved: %d / %d" % [saved, GameManager.required_saved]
 
 
 func _on_game_state_changed(_new_state: Enums.GameState) -> void:

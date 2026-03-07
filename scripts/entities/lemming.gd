@@ -59,7 +59,7 @@ func _process_movement() -> void:
 		if _level_controller.is_tile_exit(grid_pos):
 			state = Enums.LemmingState.EXITING
 			TickManager.tick_happened.disconnect(_on_tick_happened)
-			reached_exit.emit(self)
+			_start_exit_animation()
 			return
 
 		# Platzierbares Objekt prüfen → Effekt für nächsten Tick
@@ -79,6 +79,21 @@ func _animate_to(from_pos: Vector2, to_pos: Vector2) -> void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(self, "global_position", to_pos, TickManager.get_tick_duration() * 0.85)
+
+
+## Spielt die Schrumpf-Animation beim Betreten des Ausgangs ab.
+## Emittiert erst nach Abschluss reached_exit.
+func _start_exit_animation() -> void:
+	var tween: Tween = create_tween()
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(self, "scale", Vector2.ZERO, TickManager.get_tick_duration() * 0.9)
+	tween.tween_callback(_on_exit_animation_finished)
+
+
+func _on_exit_animation_finished() -> void:
+	state = Enums.LemmingState.SAVED
+	reached_exit.emit(self)
 
 
 ## Spielt die Schrumpf-Animation ab und emittiert danach died.

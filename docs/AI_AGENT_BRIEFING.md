@@ -9,6 +9,8 @@ Lies dieses Dokument zuerst, dann die anderen Docs in `docs/`.
 
 Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Spieler platziert Objekte (Richtungspfeile, Blocker) um sie zum Ausgang zu lenken. Das Spiel ist tick-basiert und pausierbar.
 
+> **Wichtig – Spieler-seitige Bezeichnung**: Die Lemminge heißen gegenüber dem Spieler **Freezelings**. In allen UI-Texten, HUD-Labels, Win/Loss-Screens und Level-Beschreibungen wird der Begriff „Freezelings" verwendet. Im Code und in der Dokumentation für Entwickler bleibt „Lemming" als interner Begriff erhalten.
+
 ---
 
 ## Godot-Version & wichtige API-Hinweise
