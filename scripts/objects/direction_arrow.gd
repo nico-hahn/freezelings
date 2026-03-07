@@ -10,14 +10,11 @@ extends PlaceableObject
 
 
 func _ready() -> void:
-	# Sprite rotieren basierend auf Richtung
+	# Frame basierend auf Richtung setzen.
+	# Sprite-Sheet-Reihenfolge: NORTH=0, EAST=1, SOUTH=2, WEST=3 – identisch mit Enum-Werten.
 	var sprite: Sprite2D = $Sprite2D
 	if sprite:
-		match target_direction:
-			Enums.Direction.NORTH: sprite.rotation_degrees = 0.0
-			Enums.Direction.EAST:  sprite.rotation_degrees = 90.0
-			Enums.Direction.SOUTH: sprite.rotation_degrees = 180.0
-			Enums.Direction.WEST:  sprite.rotation_degrees = 270.0
+		sprite.frame = target_direction as int
 
 
 func apply_to_lemming(lemming: Lemming) -> void:
