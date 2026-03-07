@@ -50,8 +50,9 @@ freezing-dungeon/
 │   │   └── main.tscn            # Einstiegsszene
 │   ├── game/
 │   │   └── game.tscn            # Spielszene (lädt Level)
-│   ├── levels/                  # Eine .tscn pro Level (vom Designer erstellt)
-│   │   └── level_01.tscn
+│   ├── levels/                  # Level-Szenen
+│   │   ├── level_base.tscn      # Template – alle Level erben hiervon
+│   │   └── level_01.tscn        # Inherited Scene von level_base.tscn
 │   ├── entities/
 │   │   ├── lemming.tscn         # Lemming-Szene
 │   │   └── lemming_spawner.tscn
@@ -61,6 +62,8 @@ freezing-dungeon/
 │   └── ui/
 │       └── hud.tscn
 └── resources/
+    ├── tilesets/                # Geteilte TileSet-Ressourcen (vom Designer gepflegt)
+    │   └── dungeon_tiles.tres   # Gemeinsames TileSet für alle Level (Ground + Walls)
     └── object_definitions/      # ObjectDefinition-Ressourcen (.tres)
         ├── direction_arrow_north.tres
         ├── direction_arrow_east.tres
@@ -100,23 +103,31 @@ Game (Node2D)
 └── HUD (CanvasLayer)            # hud.tscn
 ```
 
-### Jede Level-Szene (z.B. `level_01.tscn`)
+### `level_base.tscn` (Template – alle Level erben hiervon)
 ```
-Level (Node2D)                   # Script: level_controller.gd
+LevelBase (Node2D)               # Script: level_controller.gd
 │   @export spawn_interval: int = 3
 │   @export total_lemmings: int = 10
 │   @export required_saved: int = 7
-│   @export starting_inventory: Dictionary = {"direction_arrow": 3, "blocker": 1}
+│   @export starting_inventory: Dictionary = {}
 │   @export start_direction: Enums.Direction = Direction.EAST
 │
-├── TileMapLayer "Walls"         # Dungeon-Layout; leere Zellen = begehbar
+├── Ground (TileMapLayer)        # Rein visuell (Boden-Dekoration)
+│                                # tile_set = dungeon_tiles.tres; keine Spiellogik
+│                                # Steht VOR Walls im Baum → wird darunter gerendert
+├── Walls (TileMapLayer)         # Spiellogik: leere Zelle = begehbar, Tile = Wand
+│                                # tile_set = dungeon_tiles.tres (gleiche Resource wie Ground)
 ├── Markers (Node2D)
-│   ├── EntryPoint (Marker2D)    # Position des Eingangs (in TileMap-Koordinaten)
+│   ├── EntryPoint (Marker2D)    # Position des Eingangs
 │   └── ExitPoint (Marker2D)     # Position des Ausgangs
 ├── LemmingSpawner               # scenes/entities/lemming_spawner.tscn
 ├── LemmingsContainer (Node2D)   # Lemminge werden hier gespawnt
 └── PlacedObjectsContainer (Node2D) # Platzierte Objekte landen hier
 ```
+
+Neue Level werden als **Inherited Scene** von `level_base.tscn` angelegt
+(`Scene > New Inherited Scene`). Der Designer überschreibt dann nur Tile-Daten,
+Marker-Positionen und Export-Werte des Root-Nodes.
 
 ### `lemming.tscn`
 ```

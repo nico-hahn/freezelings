@@ -138,9 +138,14 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2
 ```
 
 ### TileMap-Konvention
-- **Leere Zelle** = begehbar (floor)
-- **Beliebige Tile-Zelle** in der "Walls"-Layer = Wand (nicht begehbar)
+- Jedes Level hat **zwei TileMapLayer**, beide mit demselben TileSet `dungeon_tiles.tres`:
+  - **`Ground`**: Rein visuell (Bodentextur, Dekoration). Hat keinerlei Gameplay-Einfluss.
+    `LevelController` ignoriert diesen Layer vollständig.
+  - **`Walls`**: Quelle der Spiellogik. Leere Zelle = begehbar, belegte Zelle = Wand.
+- **Leere Zelle in `Walls`** = begehbar (floor)
+- **Beliebige Tile-Zelle in `Walls`** = Wand (nicht begehbar)
 - Prüfung: `walls_layer.get_cell_source_id(grid_pos) == -1` → begehbar
+- `Ground` steht im Szenenbaum **vor** `Walls` → wird darunter gerendert
 
 ---
 

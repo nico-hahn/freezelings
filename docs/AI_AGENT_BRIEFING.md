@@ -44,11 +44,17 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `scripts/game/game.gd` | ✅ Vollständig implementiert |
 | `project.godot` | ✅ Autoloads + Input-Action registriert |
 
+### ✅ Vom Designer bereits erstellt
+| Datei | Beschreibung |
+|-------|-------------|
+| `resources/tilesets/dungeon_tiles.tres` | TileSet mit Textur und Tiles – **nicht anfassen** |
+| `scenes/levels/level_01.tscn` | Erstes Level mit Ground + Walls + Tiles + Markern |
+
 ### ❌ Noch zu erstellen (Szenen & Resources)
 | Datei | Beschreibung |
 |-------|-------------|
+| `scenes/levels/level_base.tscn` | ⭐ Template-Szene; alle Level erben hiervon (siehe story_001) |
 | `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD CanvasLayer) |
-| `scenes/levels/level_01.tscn` | Demo-Level (TileMapLayer + Markers + Spawner + Container) |
 | `scenes/entities/lemming.tscn` | Lemming (Node2D + Sprite2D) |
 | `scenes/entities/lemming_spawner.tscn` | Spawner (Node mit lemming_spawner.gd) |
 | `scenes/objects/direction_arrow.tscn` | Pfeil-Objekt (Node2D + Sprite2D) |
@@ -56,6 +62,11 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `scenes/ui/hud.tscn` | HUD-Szene (CanvasLayer) |
 | `scenes/ui/inventory_slot.tscn` | Inventar-Slot (PanelContainer) |
 | `resources/object_definitions/*.tres` | ObjectDefinition-Resources |
+
+### 🔄 Zu konvertieren
+| Datei | Aufgabe |
+|-------|---------|
+| `scenes/levels/level_01.tscn` | Von Standalone-Szene zu Inherited Scene von `level_base.tscn` umwandeln (Tile-Daten bleiben erhalten!) |
 
 ---
 
