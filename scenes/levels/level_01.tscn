@@ -7,7 +7,7 @@
 total_lemmings = 5
 required_saved = 3
 start_direction = 2
-starting_inventory = {}
+starting_inventory = {"direction_arrow_north": 2, "direction_arrow_east": 2, "direction_arrow_south": 2, "direction_arrow_west": 2, "blocker": 2}
 
 [node name="Ground" parent="." index="0"]
 texture_filter = 1

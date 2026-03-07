@@ -12,7 +12,7 @@ var grid_pos: Vector2i
 ## Wendet den Effekt dieses Objekts auf einen Lemming an.
 ## Wird aufgerufen wenn ein Lemming das Tile dieses Objekts betritt.
 ## MUSS von Unterklassen überschrieben werden.
-func apply_to_lemming(lemming: Lemming) -> void:
+func apply_to_lemming(_lemming: Lemming) -> void:
 	push_warning("PlaceableObject.apply_to_lemming() nicht implementiert für: " + get_object_type())
 
 

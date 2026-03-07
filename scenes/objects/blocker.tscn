@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://23f1ppq21bvp" path="res://scripts/objects/blocker.gd" id="1_blocker"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_blocker"]
+size = Vector2(32, 32)
+
+[node name="Blocker" type="Node2D"]
+script = ExtResource("1_blocker")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_blocker")
+

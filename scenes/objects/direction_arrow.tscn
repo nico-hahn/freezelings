@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://sgrwxjpcg6le" path="res://scripts/objects/direction_arrow.gd" id="1_arrow"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_arrow"]
+size = Vector2(32, 32)
+
+[node name="DirectionArrow" type="Node2D"]
+script = ExtResource("1_arrow")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_arrow")
+

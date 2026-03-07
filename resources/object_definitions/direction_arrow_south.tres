@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObjectDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://deiew5s5nmy7t" path="res://scripts/resources/object_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/objects/direction_arrow.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+object_id = "direction_arrow_south"
+display_name = "Pfeil Süd"
+scene = ExtResource("2_scene")
+

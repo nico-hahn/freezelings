@@ -54,18 +54,26 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | Datei | Beschreibung |
 |-------|-------------|
 | `scenes/levels/level_base.tscn` | Template-Szene; alle Level erben hiervon (Story 001 ✅) |
-| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD) |
+| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD); object_definitions gesetzt |
 | `scenes/entities/lemming.tscn` | Lemming (Node2D + Sprite2D Platzhalter) |
 | `scenes/entities/lemming_spawner.tscn` | Spawner (Node mit lemming_spawner.gd + lemming_scene gesetzt) |
-| `scenes/ui/hud.tscn` | HUD-Szene (CanvasLayer + TopBar + InventoryPanel + PauseOverlay) |
+| `scenes/objects/direction_arrow.tscn` | Pfeil-Objekt (Node2D + Sprite2D Platzhalter) – Phase 4 ✅ |
+| `scenes/objects/blocker.tscn` | Blocker-Objekt (Node2D + Sprite2D Platzhalter) – Phase 4 ✅ |
+| `scenes/ui/hud.tscn` | HUD-Szene (CanvasLayer + TopBar + InventoryPanel + PauseOverlay); inventory_slot_scene gesetzt |
+| `scenes/ui/inventory_slot.tscn` | Inventar-Slot (PanelContainer + VBoxContainer + Icon + CountLabel + Button) – Phase 4 ✅ |
+| `resources/object_definitions/direction_arrow_north.tres` | ObjectDefinition für Pfeil Nord – Phase 4 ✅ |
+| `resources/object_definitions/direction_arrow_east.tres` | ObjectDefinition für Pfeil Ost – Phase 4 ✅ |
+| `resources/object_definitions/direction_arrow_south.tres` | ObjectDefinition für Pfeil Süd – Phase 4 ✅ |
+| `resources/object_definitions/direction_arrow_west.tres` | ObjectDefinition für Pfeil West – Phase 4 ✅ |
+| `resources/object_definitions/blocker.tres` | ObjectDefinition für Blocker – Phase 4 ✅ |
 
 ### ❌ Noch zu erstellen
-| Datei | Beschreibung |
+*Alle Szenen und Resources für Phase 1–4 sind vorhanden. Fehlende Inhalte betreffen Phase 5–7:*
+| Thema | Beschreibung |
 |-------|-------------|
-| `scenes/objects/direction_arrow.tscn` | Pfeil-Objekt (Node2D + Sprite2D) |
-| `scenes/objects/blocker.tscn` | Blocker-Objekt (Node2D + Sprite2D) |
-| `scenes/ui/inventory_slot.tscn` | Inventar-Slot (PanelContainer) |
-| `resources/object_definitions/*.tres` | ObjectDefinition-Resources |
+| Win/Loss-Overlay | Visueller End-Screen (Phase 6, Schritt 21) |
+| Level-Restart | `GameManager.restart_level()` UI-Anbindung (Phase 6, Schritt 22) |
+| Kamera Pan/Zoom | Optional, Phase 7 |
 
 
 ---

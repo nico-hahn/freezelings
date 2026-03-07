@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" uid="uid://dxiedu4vtxfct" path="res://scripts/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
+[ext_resource type="Resource" path="res://resources/object_definitions/direction_arrow_north.tres" id="3_def_n"]
+[ext_resource type="Resource" path="res://resources/object_definitions/direction_arrow_east.tres" id="4_def_e"]
+[ext_resource type="Resource" path="res://resources/object_definitions/direction_arrow_south.tres" id="5_def_s"]
+[ext_resource type="Resource" path="res://resources/object_definitions/direction_arrow_west.tres" id="6_def_w"]
+[ext_resource type="Resource" path="res://resources/object_definitions/blocker.tres" id="7_def_b"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_game")
+object_definitions = [ExtResource("3_def_n"), ExtResource("4_def_e"), ExtResource("5_def_s"), ExtResource("6_def_w"), ExtResource("7_def_b")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = true
@@ -12,4 +18,3 @@ enabled = true
 [node name="LevelRoot" type="Node2D" parent="."]
 
 [node name="HUD" parent="." instance=ExtResource("2_hud")]
-
