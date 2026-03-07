@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://jnjxd4hkgsd0" path="res://assets/direction_arrows.png" id="2_tex"]
 
 [node name="DirectionArrow" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_arrow")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
