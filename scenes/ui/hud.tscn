@@ -19,26 +19,25 @@ size_flags_horizontal = 3
 text = "Gerettet: 0 / 0"
 horizontal_alignment = 1
 
-[node name="PauseButton" type="Button" parent="TopBar"]
-layout_mode = 2
-text = "⏸ Pause"
-
-[node name="InventoryPanel" type="HBoxContainer" parent="."]
-anchors_preset = 7
+[node name="BottomBar" type="HBoxContainer" parent="."]
+anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -110.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
+theme_override_constants/separation = 8
 
-[node name="PauseOverlay" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5)
-mouse_filter = 2
-visible = false
+[node name="PauseButton" type="Button" parent="BottomBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 96)
+text = "⏸"
+
+[node name="InventoryPanel" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+theme_override_constants/separation = 8

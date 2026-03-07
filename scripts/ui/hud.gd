@@ -16,9 +16,8 @@ signal pause_toggled
 
 # Node-Referenzen (im Editor über @ oder $-Pfade setzen)
 @onready var _saved_label: Label = $TopBar/SavedLabel
-@onready var _pause_button: Button = $TopBar/PauseButton
-@onready var _inventory_panel: HBoxContainer = $InventoryPanel
-@onready var _pause_overlay: ColorRect = $PauseOverlay
+@onready var _pause_button: Button = $BottomBar/PauseButton
+@onready var _inventory_panel: HBoxContainer = $BottomBar/InventoryPanel
 
 ## Aktuell ausgewählter Objekt-Typ (wird auch im game.gd benötigt)
 var selected_object_type: String = ""
@@ -29,7 +28,6 @@ var selected_object_type: String = ""
 
 func _ready() -> void:
 	_pause_button.pressed.connect(_on_pause_button_pressed)
-	_pause_overlay.visible = false
 
 	# Auf GameManager-Signale hören
 	GameManager.lemming_counts_changed.connect(_on_lemming_counts_changed)
@@ -80,9 +78,8 @@ func update_inventory_count(object_type: String, count: int) -> void:
 			break
 
 
-## Zeigt oder versteckt das Pause-Overlay.
+## Aktualisiert den Pause-Button-Text je nach Zustand.
 func set_paused(paused: bool) -> void:
-	_pause_overlay.visible = paused
 	_pause_button.text = "▶" if paused else "⏸"
 
 
