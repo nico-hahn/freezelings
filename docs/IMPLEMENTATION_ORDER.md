@@ -164,17 +164,55 @@ In der Godot-Reihenfolge:
 
 ## Phase 6: Win/Loss & Spielfluss
 
-**Ziel**: Level kann gewonnen/verloren werden, Restart funktioniert.
+**Ziel**: Level kann gewonnen/verloren werden, Fortschritt wird gespeichert, Level-Auswahl ist Entry-Point.
 
-### Schritt 21: Win/Loss-Bildschirm
-- Einfaches Overlay oder neue Szene
-- Zeigt "Level geschafft!" / "Gescheitert"
-- Buttons: Retry, (ggf. Next Level)
+**Abhängigkeiten zwischen den Schritten**: 23 → 24 → 21 → 25. Unbedingt in dieser Reihenfolge implementieren.
+
+### Schritt 21: Win/Loss-Bildschirm mit Sterne-Bewertung
+- Overlay-Szene `scenes/ui/win_loss_screen.tscn` (CanvasLayer)
+- Zeigt: Titel ("Level geschafft!" / "Gescheitert"), Sterne-Anzeige (0–3), gerettete Lemminge
+- Sterne werden von `GameManager` berechnet anhand neuer `@export`-Schwellwerte in `LevelController`
+- `LevelController` bekommt: `stars_threshold_1`, `stars_threshold_2`, `stars_threshold_3`
+- Button "Neustart" → `GameManager.restart_level()`
+- Button "Zur Level-Auswahl" → `get_tree().change_scene_to_file("res://scenes/ui/level_select.tscn")`
+- Ergebnis (Sterne) wird in `ProgressManager` geschrieben (Schritt 24 muss vorher fertig sein)
+- Siehe **story_006**
 
 ### Schritt 22: Level-Restart
-- `GameManager.restart_level()` implementieren
-- TickManager resetten
-- Level-Szene neu laden
+- `GameManager.restart_level()` vollständig implementieren (TickManager reset, Level neu laden)
+- Wird von Win/Loss-Bildschirm über Button ausgelöst
+- Bereits in `game_manager.gd` als Stub vorhanden – nur verdrahten
+
+### Schritt 23: LevelDefinition Resource & ProgressManager Autoload
+- Neue Resource-Klasse `scripts/resources/level_definition.gd` (`class_name LevelDefinition`)
+  - `@export var level_name: String`
+  - `@export var scene_path: String` (z.B. `"res://scenes/levels/level_01.tscn"`)
+  - `@export var level_index: int` (0-basiert, bestimmt Reihenfolge + Freischaltung)
+- `.tres`-Dateien erstellen: `resources/level_definitions/level_01.tres`
+- Neuer Autoload `ProgressManager` (`scripts/global/progress_manager.gd`)
+  - `@export var level_definitions: Array[LevelDefinition]` (im Editor befüllen)
+  - Stellt bereit: `get_level_definitions()`, `is_level_unlocked(index)`, `get_stars(index)`
+- In `project.godot` als Autoload registrieren (nach GameManager)
+- Siehe **story_004**
+
+### Schritt 24: LevelProgress – SaveData & Persistenz
+- `ProgressManager` bekommt Lade/Speicher-Logik via `FileAccess` (JSON, `user://save_data.json`)
+- Methoden: `save_progress()`, `load_progress()`, `record_level_result(index, stars)`
+- `record_level_result` schaltet das nächste Level frei wenn stars >= 1
+- `load_progress()` wird in `_ready()` aufgerufen
+- Level 0 ist immer freigeschaltet (auch ohne Savefile)
+- Siehe **story_005**
+
+### Schritt 25: Level-Auswahl Szene
+- Neue Szene `scenes/ui/level_select.tscn` als Entry-Point des Spiels
+- Script `scripts/ui/level_select.gd`
+- Zeigt Grid (`GridContainer`) mit Level-Karten – dynamisch aus `ProgressManager.get_level_definitions()` befüllt
+- Jede Karte (`scenes/ui/level_card.tscn`): Level-Name, Sterne (0–3), gesperrt/freigeschaltet
+- Klick auf freigeschaltetes Level → `ProgressManager.current_level_index` setzen → `get_tree().change_scene_to_file("res://scenes/game/game.tscn")`
+- Gesperrte Level: Karte ausgegraut, nicht klickbar
+- `project.godot`: `run/main_scene` auf `res://scenes/ui/level_select.tscn` ändern
+- `game.gd` lädt Level nicht mehr hardcoded, sondern über `ProgressManager.get_current_level_definition()`
+- Siehe **story_007**
 
 ---
 

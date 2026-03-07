@@ -69,12 +69,13 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `resources/object_definitions/blocker.tres` | ObjectDefinition für Blocker – Phase 4 ✅ |
 
 ### ❌ Noch zu erstellen
-*Alle Szenen und Resources für Phase 1–4 sind vorhanden. Fehlende Inhalte betreffen Phase 5–7:*
-| Thema | Beschreibung |
-|-------|-------------|
-| Win/Loss-Overlay | Visueller End-Screen (Phase 6, Schritt 21) |
-| Level-Restart | `GameManager.restart_level()` UI-Anbindung (Phase 6, Schritt 22) |
-| Kamera Pan/Zoom | Optional, Phase 7 |
+*Alle Szenen und Resources für Phase 1–4 sind vorhanden. Fehlende Inhalte betreffen Phase 5–6:*
+| Thema | Story | Beschreibung |
+|-------|-------|-------------|
+| LevelDefinition + ProgressManager | story_004 | Resource-Klasse + Autoload für Level-Registry & Fortschritt |
+| LevelProgress SaveData | story_005 | Persistenz via JSON in `user://save_data.json` |
+| Stern-Bewertung + Win/Loss-Screen | story_006 | Sterne-Berechnung, Win/Loss-Overlay, Neustart-Button |
+| Level-Auswahl | story_007 | `level_select.tscn` als Entry-Point, Level-Karten-Grid |
 
 
 ---
@@ -155,6 +156,10 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_001 | Level Base Template Scene | ✅ Erledigt |
 | story_002 | Korrekte Screen-zu-Welt-Koordinatenumrechnung | ✅ Erledigt |
 | story_003 | Kamera: Panning & Zoom | ✅ Erledigt |
+| story_004 | LevelDefinition Resource & ProgressManager Autoload | 🟡 Bereit |
+| story_005 | LevelProgress: SaveData & Persistenz | 🟡 Bereit (nach story_004) |
+| story_006 | Stern-Bewertung & Win/Loss-Bildschirm | 🟡 Bereit (nach story_004+005) |
+| story_007 | Level-Auswahl Szene | 🟡 Bereit (nach story_004+005+006) |
 
 ---
 
