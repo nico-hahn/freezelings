@@ -71,10 +71,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
-			if not _selected_object_type.is_empty():
+			# Zuerst prüfen ob auf dem geklickten Tile ein Objekt liegt → entfernen
+			var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * mouse_event.position
+			var grid_pos: Vector2i = _level_controller.world_to_grid(world_pos) if _level_controller else Vector2i.ZERO
+			if _level_controller != null and _level_controller.has_placed_object(grid_pos):
+				_try_remove_object(mouse_event.position)
+				get_viewport().set_input_as_handled()
+			elif not _selected_object_type.is_empty():
 				_try_place_object(mouse_event.position)
-				get_viewport().set_input_as_handled()  # Kamera bekommt diesen Klick nicht
-		# Rechtsklick: Objekt entfernen
+				get_viewport().set_input_as_handled()
 		elif mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
 			_try_remove_object(mouse_event.position)
 
