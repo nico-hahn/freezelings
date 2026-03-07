@@ -151,5 +151,3 @@ func _on_lemming_reached_exit(lemming: Lemming) -> void:
 func _on_lemming_died(lemming: Lemming) -> void:
 	GameManager.on_lemming_died()
 	lemming.queue_free()
-
-

@@ -85,4 +85,3 @@ func get_tick_duration() -> float:
 func _on_timer_timeout() -> void:
 	tick_count += 1
 	tick_happened.emit(tick_count)
-

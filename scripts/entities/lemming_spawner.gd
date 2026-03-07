@@ -59,4 +59,3 @@ func _spawn_lemming() -> void:
 
 	_spawned_count += 1
 	GameManager.on_lemming_spawned()
-

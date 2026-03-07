@@ -99,4 +99,3 @@ func _check_win_loss() -> void:
 func _set_state(new_state: Enums.GameState) -> void:
 	game_state = new_state
 	game_state_changed.emit(new_state)
-

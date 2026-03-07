@@ -141,4 +141,3 @@ func _get_definition(object_type: String) -> ObjectDefinition:
 		if (def as ObjectDefinition).object_id == object_type:
 			return def as ObjectDefinition
 	return null
-
