@@ -169,9 +169,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_007 | Level-Auswahl Szene | ✅ Erledigt |
 | story_008 | Designer-Objekt-Container | ✅ Erledigt |
 | story_009 | Hole-Objekt | ✅ Erledigt |
-| story_008 | Designer-Objekt-Container (nicht entfernbar) | 🟡 Bereit |
-| story_009 | Hole-Objekt | 🟡 Bereit (nach story_008) |
-| story_010 | BreakingHole-Objekt | 🟡 Bereit (nach story_008+009) |
+| story_010 | BreakingHole-Objekt | ✅ Erledigt |
 
 ---
 

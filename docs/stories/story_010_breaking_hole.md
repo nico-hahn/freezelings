@@ -1,6 +1,6 @@
 # Story 010 – BreakingHole-Objekt
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal  
 **Voraussetzungen**: story_008 (`DesignerObjectsContainer`) und story_009 (`Hole`, `Enums.LemmingState.FALLING`, `Lemming.start_fall_animation()`) müssen vollständig implementiert sein.
 

@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/breaking_hole.gd" id="1_bh"]
+[ext_resource type="Texture2D" uid="uid://ch0sb7wb0etet" path="res://assets/breaking_hole.png" id="2_tex"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex"),
+"texture_region": Rect2(0, 0, 32, 32)
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tex"),
+"texture_region": Rect2(32, 0, 32, 32)
+}],
+"loop": false,
+"name": &"default",
+"speed": 1.0
+}]
+
+[node name="BreakingHole" type="Node2D"]
+script = ExtResource("1_bh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"default"
+autoplay = ""
+frame = 0
+
