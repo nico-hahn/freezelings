@@ -127,10 +127,10 @@ func get_placed_object(grid_pos: Vector2i) -> Node:
 ## Platziert ein Objekt auf dem Grid.
 ## Gibt true zurück wenn erfolgreich, false wenn das Tile nicht geeignet ist.
 func place_object(grid_pos: Vector2i, definition: ObjectDefinition) -> bool:
-	# Validierung
+	# Validierung – nur placed_objects prüfen, Designer-Objekte blockieren nicht
 	if not is_tile_walkable(grid_pos):
 		return false
-	if has_placed_object(grid_pos):
+	if placed_objects.has(grid_pos):
 		return false
 	if is_tile_exit(grid_pos):
 		return false
