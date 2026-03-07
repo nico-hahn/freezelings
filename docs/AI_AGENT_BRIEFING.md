@@ -79,6 +79,8 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | LevelProgress SaveData | story_005 | Persistenz via JSON in `user://save_data.json` |
 | Stern-Bewertung + Win/Loss-Screen | story_006 | Sterne-Berechnung, Win/Loss-Overlay, Neustart-Button |
 | Level-Auswahl | story_007 | `level_select.tscn` als Entry-Point, Level-Karten-Grid |
+| Designer-Objekt-Container | story_008 | `DesignerObjectsContainer` in level_base + LevelController-Logik |
+| Hole-Objekt | story_009 | Lemminge sterben mit Schrumpf-Animation; Designer-Only-Objekt |
 
 
 ---
@@ -163,7 +165,8 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_005 | LevelProgress: SaveData & Persistenz | ✅ Erledigt |
 | story_006 | Stern-Bewertung & Win/Loss-Bildschirm | ✅ Erledigt |
 | story_007 | Level-Auswahl Szene | ✅ Erledigt |
-| story_007 | Level-Auswahl Szene | 🟡 Bereit (nach story_004+005+006) |
+| story_008 | Designer-Objekt-Container (nicht entfernbar) | 🟡 Bereit |
+| story_009 | Hole-Objekt | 🟡 Bereit (nach story_008) |
 
 ---
 
