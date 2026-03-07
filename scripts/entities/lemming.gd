@@ -11,8 +11,7 @@ extends Node2D
 ## Emittiert wenn der Lemming den Ausgang betritt.
 signal reached_exit(lemming: Lemming)
 
-## Emittiert wenn der Lemming stirbt (momentan nicht aktiv ausgelöst, für spätere Erweiterung).
-@warning_ignore("unused_signal")
+## Emittiert wenn der Lemming stirbt (Hole-Animation abgeschlossen).
 signal died(lemming: Lemming)
 
 var grid_pos: Vector2i
@@ -80,4 +79,20 @@ func _animate_to(from_pos: Vector2, to_pos: Vector2) -> void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(self, "global_position", to_pos, TickManager.get_tick_duration() * 0.85)
+
+
+## Spielt die Schrumpf-Animation ab und emittiert danach died.
+## Wird von Hole.apply_to_lemming() aufgerufen.
+func start_fall_animation() -> void:
+	var tween: Tween = create_tween()
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(self, "scale", Vector2.ZERO, TickManager.get_tick_duration() * 0.9)
+	tween.tween_callback(_on_fall_animation_finished)
+
+
+func _on_fall_animation_finished() -> void:
+	state = Enums.LemmingState.DEAD
+	died.emit(self)
+
 

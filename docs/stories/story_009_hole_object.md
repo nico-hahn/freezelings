@@ -1,6 +1,6 @@
 # Story 009 – Hole-Objekt
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch  
 **Voraussetzung**: story_008 muss vollständig implementiert sein (`DesignerObjectsContainer` existiert).
 

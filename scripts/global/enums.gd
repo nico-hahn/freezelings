@@ -24,6 +24,7 @@ enum LemmingState {
 	ALIVE,
 	EXITING,  ## Wurde gerade gerettet, Animation läuft
 	SAVED,    ## Vollständig gerettet
+	FALLING,  ## Fällt ins Hole, Schrumpf-Animation läuft
 	DEAD
 }
 
