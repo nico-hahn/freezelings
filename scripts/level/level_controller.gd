@@ -58,8 +58,9 @@ func _ready() -> void:
 	var entry_grid: Vector2i = world_to_grid(_entry_point.global_position)
 	_lemming_spawner.initialize(entry_grid, spawn_interval, total_lemmings, start_direction)
 
-	# TickManager starten
+	# TickManager starten und sofort pausieren – Spieler startet manuell
 	TickManager.start()
+	TickManager.pause()
 
 
 ## Gibt true zurück wenn das Tile begehbar ist (kein Wand-Tile, kein Blocker).
