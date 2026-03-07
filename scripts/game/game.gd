@@ -6,6 +6,7 @@ extends Node2D
 
 @onready var _level_root: Node2D = $LevelRoot
 @onready var _hud: HUD = $HUD
+@onready var _win_loss_screen: WinLossScreen = $WinLossScreen
 # Kamera sitzt jetzt im Level (level_base.tscn), nicht mehr in game.tscn.
 # Wird nach Level-Laden aus dem LevelController geholt.
 var _camera: LevelCamera = null
@@ -42,7 +43,11 @@ func _ready() -> void:
 
 ## Wird aufgerufen nachdem ein Level geladen wurde.
 func _on_level_loaded() -> void:
-	# LevelController finden
+	# WinLossScreen ausblenden
+	if _win_loss_screen != null:
+		_win_loss_screen.visible = false
+	# Auswahl zurücksetzen
+	_selected_object_type = ""
 	_level_controller = null
 	await get_tree().process_frame   # Warten bis Level-Node bereit ist
 	for child in _level_root.get_children():
@@ -131,13 +136,14 @@ func _on_object_selected(object_type: String) -> void:
 		_camera.is_placing_object = not object_type.is_empty()
 
 
-func _on_level_completed(success: bool) -> void:
-	# TODO: Win/Loss-Overlay zeigen
-	# Vorerst: kurze Pause dann Neustart
-	if success:
-		print("Level geschafft! 🎉")
-	else:
-		print("Level gescheitert! 😢")
+func _on_level_completed(success: bool, stars: int) -> void:
+	TickManager.reset()
+	_win_loss_screen.show_result(
+		success,
+		stars,
+		GameManager.saved_count,
+		GameManager.total_lemmings
+	)
 
 
 func _center_camera_on_level() -> void:

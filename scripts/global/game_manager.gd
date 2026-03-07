@@ -11,7 +11,7 @@ signal game_state_changed(new_state: Enums.GameState)
 signal lemming_counts_changed(saved: int, dead: int, spawned: int, total: int)
 
 ## Emittiert wenn ein Level beendet wurde.
-signal level_completed(success: bool)
+signal level_completed(success: bool, stars: int)
 
 var game_state: Enums.GameState = Enums.GameState.MENU
 var total_lemmings: int = 0
@@ -89,11 +89,30 @@ func _check_win_loss() -> void:
 	if spawned_count == total_lemmings and finished == total_lemmings:
 		var success: bool = saved_count >= required_saved
 		TickManager.reset()
+		# Sterne berechnen
+		var stars: int = 0
+		if success:
+			var level_controller: LevelController = _get_active_level_controller()
+			if level_controller != null:
+				stars = level_controller.calculate_stars(saved_count)
+		# Fortschritt speichern
+		var level_def: LevelDefinition = ProgressManager.get_current_level_definition()
+		if level_def != null:
+			ProgressManager.record_level_result(level_def.level_index, stars)
 		if success:
 			_set_state(Enums.GameState.LEVEL_COMPLETE)
 		else:
 			_set_state(Enums.GameState.LEVEL_FAILED)
-		level_completed.emit(success)
+		level_completed.emit(success, stars)
+
+
+func _get_active_level_controller() -> LevelController:
+	if _level_root == null:
+		return null
+	for child in _level_root.get_children():
+		if child is LevelController:
+			return child as LevelController
+	return null
 
 
 func _set_state(new_state: Enums.GameState) -> void:

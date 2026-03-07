@@ -21,6 +21,7 @@ Enums="*res://scripts/global/enums.gd"
 Constants="*res://scripts/global/constants.gd"
 TickManager="*res://scripts/global/tick_manager.gd"
 GameManager="*res://scripts/global/game_manager.gd"
+ProgressManager="*res://scripts/global/progress_manager.gd"
 
 [input]
 

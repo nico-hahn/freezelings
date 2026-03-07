@@ -1,6 +1,6 @@
 # Story 004 – LevelDefinition Resource & ProgressManager Autoload
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch – Voraussetzung für story_005, story_006, story_007  
 **Implementiere diese Story vor allen anderen Phase-6-Stories.**
 

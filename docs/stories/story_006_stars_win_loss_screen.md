@@ -1,6 +1,6 @@
 # Story 006 – Stern-Bewertung & Win/Loss-Bildschirm
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch  
 **Voraussetzungen**: story_004 und story_005 müssen vollständig implementiert sein.
 

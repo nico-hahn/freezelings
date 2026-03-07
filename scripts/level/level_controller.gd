@@ -24,6 +24,13 @@ extends Node2D
 ## Beispiel: {"direction_arrow_north": 3, "direction_arrow_east": 2, "blocker": 1}
 @export var starting_inventory: Dictionary = {}
 
+## Mindestanzahl geretteter Lemminge für 1 Stern.
+@export var stars_threshold_1: int = 1
+## Mindestanzahl geretteter Lemminge für 2 Sterne.
+@export var stars_threshold_2: int = 5
+## Mindestanzahl geretteter Lemminge für 3 Sterne.
+@export var stars_threshold_3: int = 8
+
 # Interne Node-Referenzen (werden in _ready() gefunden)
 var _walls_layer: TileMapLayer
 var _entry_point: Marker2D
@@ -155,3 +162,14 @@ func _on_lemming_reached_exit(lemming: Lemming) -> void:
 func _on_lemming_died(lemming: Lemming) -> void:
 	GameManager.on_lemming_died()
 	lemming.queue_free()
+
+
+## Berechnet die erreichte Stern-Zahl basierend auf saved_count.
+func calculate_stars(saved_count: int) -> int:
+	if saved_count >= stars_threshold_3:
+		return 3
+	elif saved_count >= stars_threshold_2:
+		return 2
+	elif saved_count >= stars_threshold_1:
+		return 1
+	return 0

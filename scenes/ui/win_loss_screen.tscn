@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d4blq6bo4wrgc" path="res://scripts/ui/win_loss_screen.gd" id="1_wls"]
+
+[node name="WinLossScreen" type="CanvasLayer"]
+script = ExtResource("1_wls")
+layer = 10
+
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Level geschafft! 🎉"
+horizontal_alignment = 1
+
+[node name="StarsContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ResultLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Gerettet: 0 / 0"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Neustart"
+
+[node name="LevelSelectButton" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Zur Level-Auswahl"
+
+

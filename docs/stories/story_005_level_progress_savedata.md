@@ -1,6 +1,6 @@
 # Story 005 – LevelProgress: SaveData & Persistenz
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch  
 **Voraussetzung**: story_004 muss vollständig implementiert sein (`ProgressManager` existiert).
 

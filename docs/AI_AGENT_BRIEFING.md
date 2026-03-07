@@ -40,8 +40,10 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `scripts/objects/direction_arrow.gd` | ✅ Vollständig implementiert |
 | `scripts/objects/blocker.gd` | ✅ Vollständig implementiert |
 | `scripts/resources/object_definition.gd` | ✅ Vollständig implementiert |
+| `scripts/resources/level_definition.gd` | ✅ Vollständig implementiert (Story 004) |
+| `scripts/global/progress_manager.gd` | ✅ Vollständig implementiert (Story 004) |
 | `scripts/ui/hud.gd` | ✅ Vollständig implementiert |
-| `scripts/ui/inventory_slot.gd` | ✅ Vollständig implementiert |
+| `scripts/ui/win_loss_screen.gd` | ✅ Vollständig implementiert (Story 006) |
 | `scripts/game/game.gd` | ✅ Vollständig implementiert |
 | `project.godot` | ✅ Autoloads + Input-Action registriert |
 
@@ -67,6 +69,7 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `resources/object_definitions/direction_arrow_south.tres` | ObjectDefinition für Pfeil Süd – Phase 4 ✅ |
 | `resources/object_definitions/direction_arrow_west.tres` | ObjectDefinition für Pfeil West – Phase 4 ✅ |
 | `resources/object_definitions/blocker.tres` | ObjectDefinition für Blocker – Phase 4 ✅ |
+| `resources/level_definitions/level_01.tres` | LevelDefinition für Level 01 – Story 004 ✅ |
 
 ### ❌ Noch zu erstellen
 *Alle Szenen und Resources für Phase 1–4 sind vorhanden. Fehlende Inhalte betreffen Phase 5–6:*
@@ -156,9 +159,9 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_001 | Level Base Template Scene | ✅ Erledigt |
 | story_002 | Korrekte Screen-zu-Welt-Koordinatenumrechnung | ✅ Erledigt |
 | story_003 | Kamera: Panning & Zoom | ✅ Erledigt |
-| story_004 | LevelDefinition Resource & ProgressManager Autoload | 🟡 Bereit |
-| story_005 | LevelProgress: SaveData & Persistenz | 🟡 Bereit (nach story_004) |
-| story_006 | Stern-Bewertung & Win/Loss-Bildschirm | 🟡 Bereit (nach story_004+005) |
+| story_004 | LevelDefinition Resource & ProgressManager Autoload | ✅ Erledigt |
+| story_005 | LevelProgress: SaveData & Persistenz | ✅ Erledigt |
+| story_006 | Stern-Bewertung & Win/Loss-Bildschirm | ✅ Erledigt |
 | story_007 | Level-Auswahl Szene | 🟡 Bereit (nach story_004+005+006) |
 
 ---
