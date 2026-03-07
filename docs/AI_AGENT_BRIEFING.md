@@ -48,25 +48,25 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | Datei | Beschreibung |
 |-------|-------------|
 | `resources/tilesets/dungeon_tiles.tres` | TileSet mit Textur und Tiles – **nicht anfassen** |
-| `scenes/levels/level_01.tscn` | Erstes Level mit Ground + Walls + Tiles + Markern |
+| `scenes/levels/level_01.tscn` | Erstes Level; Inherited Scene von `level_base.tscn`; enthält Ground + Walls + Tiles + Marker |
 
-### ❌ Noch zu erstellen (Szenen & Resources)
+### ✅ Szenen & Resources (implementiert)
 | Datei | Beschreibung |
 |-------|-------------|
-| `scenes/levels/level_base.tscn` | ⭐ Template-Szene; alle Level erben hiervon (siehe story_001) |
-| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD CanvasLayer) |
-| `scenes/entities/lemming.tscn` | Lemming (Node2D + Sprite2D) |
-| `scenes/entities/lemming_spawner.tscn` | Spawner (Node mit lemming_spawner.gd) |
+| `scenes/levels/level_base.tscn` | Template-Szene; alle Level erben hiervon (Story 001 ✅) |
+| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD) |
+| `scenes/entities/lemming.tscn` | Lemming (Node2D + Sprite2D Platzhalter) |
+| `scenes/entities/lemming_spawner.tscn` | Spawner (Node mit lemming_spawner.gd + lemming_scene gesetzt) |
+| `scenes/ui/hud.tscn` | HUD-Szene (CanvasLayer + TopBar + InventoryPanel + PauseOverlay) |
+
+### ❌ Noch zu erstellen
+| Datei | Beschreibung |
+|-------|-------------|
 | `scenes/objects/direction_arrow.tscn` | Pfeil-Objekt (Node2D + Sprite2D) |
 | `scenes/objects/blocker.tscn` | Blocker-Objekt (Node2D + Sprite2D) |
-| `scenes/ui/hud.tscn` | HUD-Szene (CanvasLayer) |
 | `scenes/ui/inventory_slot.tscn` | Inventar-Slot (PanelContainer) |
 | `resources/object_definitions/*.tres` | ObjectDefinition-Resources |
 
-### 🔄 Zu konvertieren
-| Datei | Aufgabe |
-|-------|---------|
-| `scenes/levels/level_01.tscn` | Von Standalone-Szene zu Inherited Scene von `level_base.tscn` umwandeln (Tile-Daten bleiben erhalten!) |
 
 ---
 
@@ -134,6 +134,26 @@ HUD.object_selected
   - `$LevelRoot` – Node2D für Level-Instanz
   - `$HUD` – CanvasLayer mit hud.gd
   - `$Camera2D` – Camera2D
+
+---
+
+## Stories / User Stories
+
+Vollständige Beschreibungen in `docs/stories/`.
+
+| Story | Titel | Status |
+|-------|-------|--------|
+| story_001 | Level Base Template Scene | ✅ Erledigt |
+
+---
+
+## Level-Design-Workflow (für zukünftige Agents)
+
+- **Neues Level anlegen**: Im Editor `Scene > New Inherited Scene > scenes/levels/level_base.tscn` wählen.
+- Alle Level erben von `level_base.tscn` – Skript, Spawner, Container sind bereits vorhanden.
+- Level-spezifisch im Kind-Level setzen: `@export`-Werte (total_lemmings etc.), Tile-Daten in Ground/Walls, Positionen von EntryPoint/ExitPoint.
+- **`level_base.tscn` niemals direkt bearbeiten** ohne alle Kind-Szenen zu berücksichtigen.
+- UIDs in `.tscn`-Dateien müssen dem Godot-Format entsprechen (z.B. `uid://b0gpav47qbmq8`). Selbst vergebene Kurz-UIDs wie `uid://myname` sind **invalide** – Godot vergibt echte UIDs beim ersten Öffnen im Editor.
 
 ---
 

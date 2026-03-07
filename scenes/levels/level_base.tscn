@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=4]
+
+[ext_resource type="Script" uid="uid://b0gpav47qbmq8" path="res://scripts/level/level_controller.gd" id="1_lc"]
+[ext_resource type="TileSet" uid="uid://brea3fpq2hhp1" path="res://resources/tilesets/dungeon_tiles.tres" id="2_ts"]
+[ext_resource type="PackedScene" uid="uid://0sdir8cneuxs" path="res://scenes/entities/lemming_spawner.tscn" id="3_spawner"]
+
+[node name="LevelBase" type="Node2D"]
+script = ExtResource("1_lc")
+total_lemmings = 10
+required_saved = 7
+spawn_interval = 3
+start_direction = 1
+starting_inventory = {}
+
+[node name="Ground" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_ts")
+texture_filter = 1
+
+[node name="Walls" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_ts")
+texture_filter = 1
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="EntryPoint" type="Marker2D" parent="Markers"]
+
+[node name="ExitPoint" type="Marker2D" parent="Markers"]
+
+[node name="LemmingSpawner" parent="." instance=ExtResource("3_spawner")]
+
+[node name="LemmingsContainer" type="Node2D" parent="."]
+
+[node name="PlacedObjectsContainer" type="Node2D" parent="."]
+
+

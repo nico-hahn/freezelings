@@ -1,6 +1,6 @@
 # Story 001 – Level Base Template Scene
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch – Voraussetzung für komfortables Level-Design  
 
 ---
