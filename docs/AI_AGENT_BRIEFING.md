@@ -33,6 +33,7 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `scripts/global/tick_manager.gd` | ✅ Vollständig implementiert |
 | `scripts/global/game_manager.gd` | ✅ Vollständig implementiert |
 | `scripts/level/level_controller.gd` | ✅ Vollständig implementiert |
+| `scripts/level/level_camera.gd` | ✅ Vollständig implementiert (Story 003) |
 | `scripts/entities/lemming.gd` | ✅ Vollständig implementiert |
 | `scripts/entities/lemming_spawner.gd` | ✅ Vollständig implementiert |
 | `scripts/objects/placeable_object.gd` | ✅ Vollständig implementiert |
@@ -53,8 +54,8 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 ### ✅ Szenen & Resources (implementiert)
 | Datei | Beschreibung |
 |-------|-------------|
-| `scenes/levels/level_base.tscn` | Template-Szene; alle Level erben hiervon (Story 001 ✅) |
-| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + Camera2D + LevelRoot + HUD); object_definitions gesetzt |
+| `scenes/levels/level_base.tscn` | Template-Szene; alle Level erben hiervon; enthält Camera2D mit level_camera.gd (Story 001+003 ✅) |
+| `scenes/game/game.tscn` | Haupt-Spielszene (Node2D + LevelRoot + HUD); **keine Camera2D** – sitzt im Level |
 | `scenes/entities/lemming.tscn` | Lemming (Node2D + Sprite2D Platzhalter) |
 | `scenes/entities/lemming_spawner.tscn` | Spawner (Node mit lemming_spawner.gd + lemming_scene gesetzt) |
 | `scenes/objects/direction_arrow.tscn` | Pfeil-Objekt (Node2D + Sprite2D Platzhalter) – Phase 4 ✅ |
@@ -152,6 +153,8 @@ Vollständige Beschreibungen in `docs/stories/`.
 | Story | Titel | Status |
 |-------|-------|--------|
 | story_001 | Level Base Template Scene | ✅ Erledigt |
+| story_002 | Korrekte Screen-zu-Welt-Koordinatenumrechnung | ✅ Erledigt |
+| story_003 | Kamera: Panning & Zoom | ✅ Erledigt |
 
 ---
 

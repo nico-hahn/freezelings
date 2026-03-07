@@ -15,6 +15,7 @@ signal slot_pressed
 
 var _object_type: String = ""
 var _count: int = 0
+var _is_selected: bool = false
 
 
 ## Initialisiert den Slot.
@@ -49,11 +50,22 @@ func get_count() -> int:
 	return _count
 
 
+## Setzt den visuellen Ausgewählt-Zustand des Slots.
+func set_selected(selected: bool) -> void:
+	_is_selected = selected
+	_update_availability()
+
+
 func _on_button_pressed() -> void:
 	if _count > 0:
 		slot_pressed.emit()
 
 
 func _update_availability() -> void:
-	modulate = Color.WHITE if _count > 0 else Color(0.5, 0.5, 0.5, 1.0)
+	if _count <= 0:
+		modulate = Color(0.5, 0.5, 0.5, 1.0)
+	elif _is_selected:
+		modulate = Color(1.0, 0.85, 0.2, 1.0)  # Gold-Highlight
+	else:
+		modulate = Color.WHITE
 

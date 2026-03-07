@@ -102,7 +102,21 @@ func _on_game_state_changed(_new_state: Enums.GameState) -> void:
 
 func _on_slot_pressed(object_type: String) -> void:
 	selected_object_type = object_type
+	# Alle Slots deselektieren, dann den gedrückten hervorheben
+	for child in _inventory_panel.get_children():
+		if child.has_method("set_selected"):
+			child.set_selected(child.get_object_type() == object_type)
 	object_selected.emit(object_type)
+
+
+## Hebt die aktuelle Inventar-Auswahl auf.
+## Wird von game.gd nach erfolgreicher Objekt-Platzierung aufgerufen.
+func deselect_inventory() -> void:
+	selected_object_type = ""
+	for child in _inventory_panel.get_children():
+		if child.has_method("set_selected"):
+			child.set_selected(false)
+	object_selected.emit("")
 
 
 ## Tastatur-Shortcut: P zum Pausieren

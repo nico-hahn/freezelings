@@ -6,7 +6,9 @@ extends Node2D
 
 @onready var _level_root: Node2D = $LevelRoot
 @onready var _hud: HUD = $HUD
-@onready var _camera: Camera2D = $Camera2D
+# Kamera sitzt jetzt im Level (level_base.tscn), nicht mehr in game.tscn.
+# Wird nach Level-Laden aus dem LevelController geholt.
+var _camera: LevelCamera = null
 
 ## Alle verfügbaren ObjectDefinitions (im Editor per Array befüllen oder per load)
 @export var object_definitions: Array[ObjectDefinition] = []
@@ -52,6 +54,9 @@ func _on_level_loaded() -> void:
 		push_error("Game: Kein LevelController im geladenen Level gefunden!")
 		return
 
+	# Kamera aus dem Level holen
+	_camera = _level_controller.get_node("Camera2D") as LevelCamera
+
 	# Inventar aus Level laden
 	_inventory = _level_controller.starting_inventory.duplicate()
 
@@ -63,14 +68,15 @@ func _on_level_loaded() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Linksklick: Objekt platzieren
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
-			_try_place_object(mouse_event.global_position)
+			if not _selected_object_type.is_empty():
+				_try_place_object(mouse_event.position)
+				get_viewport().set_input_as_handled()  # Kamera bekommt diesen Klick nicht
 		# Rechtsklick: Objekt entfernen
 		elif mouse_event.button_index == MOUSE_BUTTON_RIGHT and mouse_event.pressed:
-			_try_remove_object(mouse_event.global_position)
+			_try_remove_object(mouse_event.position)
 
 
 func _try_place_object(screen_pos: Vector2) -> void:
@@ -80,7 +86,7 @@ func _try_place_object(screen_pos: Vector2) -> void:
 		return
 
 	# Screenposition → Weltposition
-	var world_pos: Vector2 = _camera.get_canvas_transform().affine_inverse() * screen_pos
+	var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var grid_pos: Vector2i = _level_controller.world_to_grid(world_pos)
 
 	# Passende ObjectDefinition finden
@@ -93,12 +99,14 @@ func _try_place_object(screen_pos: Vector2) -> void:
 	if _level_controller.place_object(grid_pos, definition.scene):
 		_inventory[_selected_object_type] -= 1
 		_hud.update_inventory_count(_selected_object_type, _inventory[_selected_object_type])
+		# Auswahl aufheben → Panning wieder möglich
+		_hud.deselect_inventory()
 
 
 func _try_remove_object(screen_pos: Vector2) -> void:
 	if _level_controller == null:
 		return
-	var world_pos: Vector2 = _camera.get_canvas_transform().affine_inverse() * screen_pos
+	var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var grid_pos: Vector2i = _level_controller.world_to_grid(world_pos)
 
 	if _level_controller.has_placed_object(grid_pos):
@@ -113,6 +121,9 @@ func _try_remove_object(screen_pos: Vector2) -> void:
 
 func _on_object_selected(object_type: String) -> void:
 	_selected_object_type = object_type
+	# Kamera informieren damit sie Panning bei aktiver Auswahl deaktiviert
+	if _camera != null:
+		_camera.is_placing_object = not object_type.is_empty()
 
 
 func _on_level_completed(success: bool) -> void:
@@ -125,7 +136,7 @@ func _on_level_completed(success: bool) -> void:
 
 
 func _center_camera_on_level() -> void:
-	if _level_controller == null:
+	if _level_controller == null or _camera == null:
 		return
 	# Mittelpunkt des Levels berechnen (aus TileMapLayer)
 	var walls_layer: TileMapLayer = _level_controller.get_node("Walls") as TileMapLayer
@@ -133,7 +144,8 @@ func _center_camera_on_level() -> void:
 		return
 	var used_rect: Rect2i = walls_layer.get_used_rect()
 	var center_grid: Vector2i = used_rect.position + used_rect.size / 2
-	_camera.global_position = _level_controller.grid_to_world(center_grid)
+	# position (lokal) statt global_position – Kamera ist Kind des Level-Nodes
+	_camera.position = _level_controller.grid_to_world(center_grid)
 
 
 func _get_definition(object_type: String) -> ObjectDefinition:
