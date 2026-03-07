@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dt8v1cecj4ynl"]
 
-[ext_resource type="Script" path="res://scripts/objects/hole.gd" id="1_hole"]
+[ext_resource type="Script" uid="uid://cfiul7y4ann8l" path="res://scripts/objects/hole.gd" id="1_hole"]
 [ext_resource type="Texture2D" uid="uid://c8ub466gg3cgb" path="res://assets/hole.png" id="2_tex"]
 
 [node name="Hole" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_hole")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_tex")
-

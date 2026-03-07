@@ -37,4 +37,3 @@ func _build_level_grid() -> void:
 func _on_card_pressed(level_index: int) -> void:
 	ProgressManager.current_level_index = level_index
 	get_tree().change_scene_to_file("res://scenes/game/game.tscn")
-
