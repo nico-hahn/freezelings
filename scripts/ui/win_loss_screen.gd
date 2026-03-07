@@ -42,8 +42,5 @@ func _on_restart_pressed() -> void:
 
 
 func _on_level_select_pressed() -> void:
-	if not ResourceLoader.exists("res://scenes/ui/level_select.tscn"):
-		push_error("WinLossScreen: level_select.tscn existiert noch nicht.")
-		return
 	get_tree().change_scene_to_file("res://scenes/ui/level_select.tscn")
 

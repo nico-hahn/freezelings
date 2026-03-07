@@ -162,6 +162,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_004 | LevelDefinition Resource & ProgressManager Autoload | ✅ Erledigt |
 | story_005 | LevelProgress: SaveData & Persistenz | ✅ Erledigt |
 | story_006 | Stern-Bewertung & Win/Loss-Bildschirm | ✅ Erledigt |
+| story_007 | Level-Auswahl Szene | ✅ Erledigt |
 | story_007 | Level-Auswahl Szene | 🟡 Bereit (nach story_004+005+006) |
 
 ---

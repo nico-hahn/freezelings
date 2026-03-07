@@ -1,6 +1,6 @@
 # Story 007 – Level-Auswahl Szene
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch  
 **Voraussetzungen**: story_004, story_005 und story_006 müssen vollständig implementiert sein.
 

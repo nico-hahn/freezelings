@@ -35,9 +35,12 @@ func _ready() -> void:
 	# GameManager-Signale verbinden
 	GameManager.level_completed.connect(_on_level_completed)
 
-	# Level laden (erstes Level als Standard)
-	# Für spätere Erweiterung: Level-Select oder Argument übergeben
-	GameManager.load_level("res://scenes/levels/level_01.tscn")
+	# Level aus ProgressManager laden
+	var level_def: LevelDefinition = ProgressManager.get_current_level_definition()
+	if level_def == null:
+		push_error("Game: Keine LevelDefinition im ProgressManager gefunden.")
+		return
+	GameManager.load_level(level_def.scene_path)
 	_on_level_loaded()
 
 
