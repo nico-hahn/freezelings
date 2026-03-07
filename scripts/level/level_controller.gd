@@ -92,7 +92,7 @@ func get_placed_object(grid_pos: Vector2i) -> Node:
 
 ## Platziert ein Objekt auf dem Grid.
 ## Gibt true zurück wenn erfolgreich, false wenn das Tile nicht geeignet ist.
-func place_object(grid_pos: Vector2i, object_scene: PackedScene) -> bool:
+func place_object(grid_pos: Vector2i, definition: ObjectDefinition) -> bool:
 	# Validierung
 	if not is_tile_walkable(grid_pos):
 		return false
@@ -104,7 +104,10 @@ func place_object(grid_pos: Vector2i, object_scene: PackedScene) -> bool:
 		return false
 
 	# Objekt instanzieren
-	var obj: Node2D = object_scene.instantiate() as Node2D
+	var obj: Node2D = definition.scene.instantiate() as Node2D
+	# exported_properties vor add_child setzen damit _ready() die Werte bereits sieht
+	for key: String in definition.exported_properties:
+		obj.set(key, definition.exported_properties[key])
 	_placed_objects_container.add_child(obj)
 	obj.global_position = grid_to_world(grid_pos)
 	obj.grid_pos = grid_pos

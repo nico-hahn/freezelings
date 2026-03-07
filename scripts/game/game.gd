@@ -96,7 +96,7 @@ func _try_place_object(screen_pos: Vector2) -> void:
 		return
 
 	# Platzieren
-	if _level_controller.place_object(grid_pos, definition.scene):
+	if _level_controller.place_object(grid_pos, definition):
 		_inventory[_selected_object_type] -= 1
 		_hud.update_inventory_count(_selected_object_type, _inventory[_selected_object_type])
 		# Auswahl aufheben → Panning wieder möglich

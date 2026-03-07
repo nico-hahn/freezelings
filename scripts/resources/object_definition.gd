@@ -19,3 +19,7 @@ extends Resource
 ## Icon für den Inventar-Slot im HUD.
 @export var icon: Texture2D = null
 
+## Optionale Properties die nach dem Instanzieren auf das Objekt gesetzt werden.
+## Beispiel: {"target_direction": 1} setzt obj.target_direction = Enums.Direction.EAST
+@export var exported_properties: Dictionary = {}
+

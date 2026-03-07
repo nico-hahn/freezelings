@@ -14,3 +14,4 @@ object_id = "direction_arrow_north"
 display_name = "Pfeil Nord"
 scene = ExtResource("2_scene")
 icon = SubResource("AtlasTexture_north")
+exported_properties = {"target_direction": 0}
