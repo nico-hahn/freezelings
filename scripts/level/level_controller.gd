@@ -38,9 +38,18 @@ var _exit_point: Marker2D
 var _lemming_spawner: Node        ## LemmingSpawner
 var _lemmings_container: Node2D
 var _placed_objects_container: Node2D
+var _designer_objects_container: Node2D
 
 ## Aktuell platzierte Objekte: Vector2i → PlaceableObject-Node
 var placed_objects: Dictionary = {}
+
+## Objekte die der Designer platziert hat: Vector2i → PlaceableObject-Node
+## Diese Objekte können vom Spieler nicht entfernt werden.
+## Designer-Objekte werden direkt im Godot-Editor als Kinder von DesignerObjectsContainer
+## in der Level-Szene platziert. Sie müssen eine PlaceableObject-Unterklasse sein.
+## Ihre grid_pos wird automatisch aus ihrer globalen Position berechnet.
+## Der Spieler kann diese Objekte nicht entfernen.
+var designer_objects: Dictionary = {}
 
 ## Grid-Position des Ausgangs (gecacht für schnellen Zugriff)
 var _exit_grid_pos: Vector2i
@@ -54,6 +63,7 @@ func _ready() -> void:
 	_lemming_spawner = $LemmingSpawner
 	_lemmings_container = $LemmingsContainer as Node2D
 	_placed_objects_container = $PlacedObjectsContainer as Node2D
+	_designer_objects_container = $DesignerObjectsContainer as Node2D
 
 	# Exit-Position cachen
 	_exit_grid_pos = world_to_grid(_exit_point.global_position)
@@ -65,9 +75,22 @@ func _ready() -> void:
 	var entry_grid: Vector2i = world_to_grid(_entry_point.global_position)
 	_lemming_spawner.initialize(entry_grid, spawn_interval, total_lemmings, start_direction)
 
+	# Designer-Objekte einlesen
+	_load_designer_objects()
+
 	# TickManager starten und sofort pausieren – Spieler startet manuell
 	TickManager.start()
 	TickManager.pause()
+
+
+## Liest Designer-Objekte aus DesignerObjectsContainer und registriert sie im Dictionary.
+func _load_designer_objects() -> void:
+	for child in _designer_objects_container.get_children():
+		if child is PlaceableObject:
+			var obj := child as PlaceableObject
+			var grid_pos_obj: Vector2i = world_to_grid(obj.global_position)
+			obj.grid_pos = grid_pos_obj
+			designer_objects[grid_pos_obj] = obj
 
 
 ## Gibt true zurück wenn das Tile begehbar ist (kein Wand-Tile, kein Blocker).
@@ -75,10 +98,10 @@ func is_tile_walkable(grid_pos: Vector2i) -> bool:
 	# Wand-Prüfung: Wenn source_id != -1 ist ein Tile vorhanden = Wand
 	if _walls_layer.get_cell_source_id(grid_pos) != -1:
 		return false
-	# Blocker-Prüfung
-	if placed_objects.has(grid_pos):
-		var obj = placed_objects[grid_pos]
-		if obj.get_object_type() == "blocker":
+	# Blocker-Prüfung (beide Container)
+	if has_placed_object(grid_pos):
+		var obj := get_placed_object(grid_pos)
+		if obj != null and obj.get_object_type() == "blocker":
 			return false
 	return true
 
@@ -88,14 +111,17 @@ func is_tile_exit(grid_pos: Vector2i) -> bool:
 	return grid_pos == _exit_grid_pos
 
 
-## Gibt true zurück wenn auf dem Tile ein platzierbares Objekt liegt.
+## Gibt true zurück wenn auf dem Tile ein platzierbares Objekt liegt (beide Container).
 func has_placed_object(grid_pos: Vector2i) -> bool:
-	return placed_objects.has(grid_pos)
+	return placed_objects.has(grid_pos) or designer_objects.has(grid_pos)
 
 
-## Gibt das platzierte Objekt auf dem Tile zurück, oder null.
+## Gibt das platzierte Objekt auf dem Tile zurück (beide Container), oder null.
+## placed_objects hat Vorrang vor designer_objects.
 func get_placed_object(grid_pos: Vector2i) -> Node:
-	return placed_objects.get(grid_pos, null)
+	if placed_objects.has(grid_pos):
+		return placed_objects.get(grid_pos, null)
+	return designer_objects.get(grid_pos, null)
 
 
 ## Platziert ein Objekt auf dem Grid.

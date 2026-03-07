@@ -33,6 +33,8 @@ texture_filter = 1
 
 [node name="LemmingSpawner" parent="." instance=ExtResource("3_spawner")]
 
+[node name="DesignerObjectsContainer" type="Node2D" parent="."]
+
 [node name="LemmingsContainer" type="Node2D" parent="."]
 
 [node name="PlacedObjectsContainer" type="Node2D" parent="."]

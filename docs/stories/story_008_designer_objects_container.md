@@ -1,6 +1,6 @@
 # Story 008 – Designer-Objekt-Container (nicht entfernbar)
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch – Voraussetzung für story_009 (Hole-Objekt)
 
 ---
