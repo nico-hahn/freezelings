@@ -29,12 +29,12 @@ func show_result(success: bool, stars: int, saved: int, total: int) -> void:
 func _update_stars(stars: int) -> void:
 	for child in _stars_container.get_children():
 		child.queue_free()
-	var star_font: Font = load("res://resources/font/stars.tres")
+	var star_font = load("res://resources/font/stars.tres")
 	for i in range(3):
 		var star_label := Label.new()
 		star_label.text = "G" if i < stars else "H"
 		if star_font:
-			star_label.add_theme_font_override("font", star_font)
+			star_label.label_settings = star_font
 		_stars_container.add_child(star_label)
 
 
