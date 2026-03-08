@@ -1,6 +1,6 @@
 # Story 018 – Hintergrundmusik (Loop, leiser bei Tick-Pause)
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal  
 **Voraussetzung**: story_016 und story_017 müssen vollständig implementiert sein.
 
