@@ -1,6 +1,6 @@
 # Story 015 – Restart-Button im HUD
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal
 
 ---
@@ -55,4 +55,5 @@ func _on_restart_button_pressed() -> void:
 - [ ] Klick startet das aktuelle Level neu (`GameManager.restart_level()`)
 - [ ] Der Button funktioniert sowohl während des laufenden Spiels als auch wenn pausiert
 - [ ] Keine anderen bestehenden Dateien werden verändert (außer `hud.tscn` und `hud.gd`)
+
 

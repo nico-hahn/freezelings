@@ -17,6 +17,7 @@ signal pause_toggled
 # Node-Referenzen (im Editor über @ oder $-Pfade setzen)
 @onready var _total_label: Label = $TopBar/StatsContainer/TotalLabel
 @onready var _saved_label: Label = $TopBar/StatsContainer/SavedLabel
+@onready var _restart_button: Button = $BottomBar/RestartButton
 @onready var _pause_button: Button = $BottomBar/PauseButton
 @onready var _inventory_panel: HBoxContainer = $BottomBar/InventoryPanel
 
@@ -34,6 +35,7 @@ const WOBBLE_PAUSE: float = 0.25
 
 
 func _ready() -> void:
+	_restart_button.pressed.connect(_on_restart_button_pressed)
 	_pause_button.pressed.connect(_on_pause_button_pressed)
 
 	# Auf GameManager-Signale hören
@@ -115,6 +117,10 @@ func _stop_wobble() -> void:
 
 func _on_pause_button_pressed() -> void:
 	pause_toggled.emit()
+
+
+func _on_restart_button_pressed() -> void:
+	GameManager.restart_level()
 
 
 func _on_lemming_counts_changed(saved: int, _dead: int, _spawned: int, total: int) -> void:
