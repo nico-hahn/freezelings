@@ -33,16 +33,20 @@ const ICE_STREAMS: Array = [
 	preload("res://assets/sound/ice/Freeze3.wav"),
 ]
 
+## Lautstärke-Referenz Musik
+const MUSIC_VOLUME_NORMAL: float = 0.0
+const MUSIC_VOLUME_DIMMED: float = -6.0
+const MUSIC_FADE_DURATION: float = 0.8
+
 # --- Nodes ---
 @onready var _whistle_player: AudioStreamPlayer = $WhistlePlayer
 @onready var _wind_player: AudioStreamPlayer = $WindPlayer
 @onready var _ice_player: AudioStreamPlayer = $IcePlayer
-
-# --- Musik (Stub für story_018) ---
-# @onready var _music_player: AudioStreamPlayer = $MusicPlayer
+@onready var _music_player: AudioStreamPlayer = $MusicPlayer
 
 var _ambient_active: bool = false
 var _fade_tween: Tween = null
+var _music_tween: Tween = null
 var _ice_timer: SceneTreeTimer = null
 
 
@@ -68,12 +72,14 @@ func _on_ticks_paused() -> void:
 	_fade_in_ambient()
 	_play_next_wind()
 	_schedule_next_ice()
+	_set_music_volume(MUSIC_VOLUME_DIMMED)
 
 
 func _on_ticks_resumed() -> void:
 	_ambient_active = false
 	_fade_out_ambient()
 	_ice_timer = null
+	_set_music_volume(MUSIC_VOLUME_NORMAL)
 
 
 func _fade_in_ambient() -> void:
@@ -129,9 +135,9 @@ func _on_ice_finished() -> void:
 	_schedule_next_ice()
 
 
-# --- Stub für story_018 ---
-# func play_music() -> void:
-#     _music_player.play()
-#
-# func stop_music() -> void:
-#     _music_player.stop()
+func _set_music_volume(target_db: float) -> void:
+	if _music_tween != null and _music_tween.is_valid():
+		_music_tween.kill()
+	_music_tween = create_tween()
+	_music_tween.tween_property(_music_player, "volume_db", target_db, MUSIC_FADE_DURATION)\
+		.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
