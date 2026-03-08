@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_vgi8c")
 level_name = "Level 03"
-scene_path = "res://scenes/levels/level_01.tscn"
+scene_path = "res://scenes/levels/level_03.tscn"
 level_index = 2
