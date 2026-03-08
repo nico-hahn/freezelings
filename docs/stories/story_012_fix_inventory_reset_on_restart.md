@@ -1,6 +1,6 @@
 # Story 012 – Bug: Inventar wird bei Level-Neustart nicht zurückgesetzt
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Hoch – betrifft Kernspielbarkeit  
 **Typ**: Bugfix
 

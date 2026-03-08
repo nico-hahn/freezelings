@@ -13,6 +13,9 @@ signal lemming_counts_changed(saved: int, dead: int, spawned: int, total: int)
 ## Emittiert wenn ein Level beendet wurde.
 signal level_completed(success: bool, stars: int)
 
+## Emittiert nachdem eine Level-Szene vollständig instanziert und dem LevelRoot hinzugefügt wurde.
+signal level_loaded
+
 var game_state: Enums.GameState = Enums.GameState.MENU
 var total_lemmings: int = 0
 var required_saved: int = 0
@@ -52,6 +55,7 @@ func load_level(level_path: String) -> void:
 		return
 	var level_instance: Node = level_scene.instantiate()
 	_level_root.add_child(level_instance)
+	level_loaded.emit()
 
 
 ## Startet das aktuelle Level neu.

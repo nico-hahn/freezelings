@@ -34,6 +34,7 @@ func _ready() -> void:
 
 	# GameManager-Signale verbinden
 	GameManager.level_completed.connect(_on_level_completed)
+	GameManager.level_loaded.connect(_on_level_loaded)
 
 	# Level aus ProgressManager laden
 	var level_def: LevelDefinition = ProgressManager.get_current_level_definition()
@@ -41,7 +42,7 @@ func _ready() -> void:
 		push_error("Game: Keine LevelDefinition im ProgressManager gefunden.")
 		return
 	GameManager.load_level(level_def.scene_path)
-	_on_level_loaded()
+	# _on_level_loaded() wird über das Signal ausgelöst – kein manueller Aufruf
 
 
 ## Wird aufgerufen nachdem ein Level geladen wurde.
