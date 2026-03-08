@@ -35,5 +35,5 @@ func _gui_input(event: InputEvent) -> void:
 func _build_stars_string(stars: int) -> String:
 	var result: String = ""
 	for i in range(3):
-		result += "⭐" if i < stars else "☆"
+		result += "G" if i < stars else "H"
 	return result

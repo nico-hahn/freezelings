@@ -1,13 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://r8w7bjyj7glu"]
+[gd_scene load_steps=4 format=3 uid="uid://r8w7bjyj7glu"]
 
 [ext_resource type="Script" uid="uid://rddmip05ngtt" path="res://scripts/ui/level_card.gd" id="1_lc"]
 [ext_resource type="Texture2D" uid="uid://bysqgcdcqwxkf" path="res://assets/lock.png" id="2_bclti"]
-[ext_resource type="FontFile" uid="uid://tcykvqq4dsbc" path="res://assets/font/MFStarDings.ttf" id="2_xol0m"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_07o60"]
-font = ExtResource("2_xol0m")
-font_size = 26
-font_color = Color(1, 0.74509805, 0.12941177, 1)
+[ext_resource type="LabelSettings" uid="uid://cjhaqc2jglekt" path="res://resources/font/stars.tres" id="2_xol0m"]
 
 [node name="LevelCard" type="PanelContainer"]
 custom_minimum_size = Vector2(160, 100)
@@ -35,7 +30,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 text = "HHH"
-label_settings = SubResource("LabelSettings_07o60")
+label_settings = ExtResource("2_xol0m")
 horizontal_alignment = 1
 
 [node name="LockedOverlay" type="MarginContainer" parent="."]
