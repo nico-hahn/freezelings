@@ -19,6 +19,9 @@ var direction: Enums.Direction
 var state: Enums.LemmingState = Enums.LemmingState.ALIVE
 
 var _level_controller: LevelController
+@onready var _anim_player: AnimationPlayer = $AnimationPlayer
+
+const _DIRECTION_ANIM: Array[String] = ["north", "east", "south", "west"]
 
 
 ## Initialisierung. Muss direkt nach Instanzierung aufgerufen werden.
@@ -34,8 +37,17 @@ func initialize(
 	# Sofortige visuelle Positionierung (kein Tween beim Spawn)
 	global_position = _level_controller.grid_to_world(grid_pos)
 
+	# Animation starten
+	_play_animation()
+
 	# Tick-Signal verbinden
 	TickManager.tick_happened.connect(_on_tick_happened)
+
+
+func _play_animation() -> void:
+	if _anim_player == null:
+		return
+	_anim_player.play(_DIRECTION_ANIM[direction as int])
 
 
 func _on_tick_happened(_tick_number: int) -> void:
@@ -45,6 +57,8 @@ func _on_tick_happened(_tick_number: int) -> void:
 
 
 func _process_movement() -> void:
+	# Animation für aktuelle Richtung spielen (wechselt erst wenn Lemming das Tile verlässt)
+	_play_animation()
 	var move_vec: Vector2i = Enums.direction_to_vector(direction)
 	var target_pos: Vector2i = grid_pos + move_vec
 

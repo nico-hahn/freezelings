@@ -5,4 +5,4 @@
 [resource]
 script = ExtResource("1_ld")
 level_name = "Level 01"
-scene_path = "res://scenes/levels/level_04.tscn"
+scene_path = "res://scenes/levels/level_01.tscn"
