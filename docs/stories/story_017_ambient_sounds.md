@@ -1,6 +1,6 @@
 # Story 017 – Wind & Ice Ambient-Sounds (Pause-gesteuert)
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal  
 **Voraussetzung**: story_016 muss vollständig implementiert sein (`AudioManager` existiert, `WindPlayer` und `IcePlayer` sind als Nodes vorhanden).
 

@@ -1,6 +1,6 @@
 # Story 016 – AudioManager Autoload & Whistle-Sound
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal  
 **Voraussetzung**: Keine. Muss vor story_017 implementiert werden.
 

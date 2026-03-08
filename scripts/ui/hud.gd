@@ -116,6 +116,7 @@ func _stop_wobble() -> void:
 
 
 func _on_pause_button_pressed() -> void:
+	AudioManager.play_whistle()
 	pause_toggled.emit()
 
 
