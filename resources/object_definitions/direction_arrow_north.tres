@@ -11,7 +11,7 @@ region = Rect2(0, 0, 16, 16)
 [resource]
 script = ExtResource("1_def")
 object_id = "direction_arrow_north"
-display_name = "Pfeil Nord"
+display_name = "Up Arrow"
 scene = ExtResource("2_scene")
 icon = SubResource("AtlasTexture_north")
 exported_properties = {
