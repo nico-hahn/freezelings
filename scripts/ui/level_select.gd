@@ -5,7 +5,7 @@
 class_name LevelSelect
 extends Control
 
-@onready var _level_grid: GridContainer = $VBoxContainer/LevelGrid
+@onready var _level_grid: GridContainer = %LevelGrid
 
 @export var level_card_scene: PackedScene  # Im Editor auf level_card.tscn setzen
 
