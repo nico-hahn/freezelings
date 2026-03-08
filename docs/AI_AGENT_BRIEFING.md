@@ -172,6 +172,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_010 | BreakingHole-Objekt | ✅ Erledigt |
 | story_011 | RotatingDirectionArrow-Objekt | ✅ Erledigt |
 | story_012 | Bug: Inventar-Reset bei Level-Neustart | 🟡 Bereit |
+| story_013 | Frozen Sprite & Shiver-Animation beim Pausieren | ✅ Erledigt |
 
 ---
 
