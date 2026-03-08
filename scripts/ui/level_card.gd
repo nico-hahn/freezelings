@@ -7,9 +7,9 @@ extends PanelContainer
 
 signal card_pressed(level_index: int)
 
-@onready var _name_label: Label = $VBoxContainer/LevelNameLabel
-@onready var _stars_label: Label = $VBoxContainer/StarsLabel
-@onready var _locked_overlay: ColorRect = $VBoxContainer/LockedOverlay
+@onready var _name_label: Label = %LevelNameLabel
+@onready var _stars_label: Label = %StarsLabel
+@onready var _locked_overlay: MarginContainer = %LockedOverlay
 
 var _level_index: int = -1
 var _unlocked: bool = false
@@ -37,4 +37,3 @@ func _build_stars_string(stars: int) -> String:
 	for i in range(3):
 		result += "⭐" if i < stars else "☆"
 	return result
-

@@ -1,13 +1,13 @@
 [gd_scene load_steps=6 format=3 uid="uid://b1jiu6tx0d2d4"]
 
 [ext_resource type="Script" uid="uid://2ik4732w8cfu" path="res://scripts/ui/level_select.gd" id="1_ls"]
-[ext_resource type="PackedScene" path="res://scenes/ui/level_card.tscn" id="2_lc"]
+[ext_resource type="PackedScene" uid="uid://r8w7bjyj7glu" path="res://scenes/ui/level_card.tscn" id="2_lc"]
 [ext_resource type="FontFile" uid="uid://435wqt5e8b8y" path="res://assets/font/IceCaps.ttf" id="3_7l8mc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ccmqc"]
 font = ExtResource("3_7l8mc")
 font_size = 120
-font_color = Color(0.4402, 0.69201326, 0.71, 1)
+font_color = Color(0.6, 0.94509804, 0.96862745, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7l8mc"]
 font = ExtResource("3_7l8mc")
