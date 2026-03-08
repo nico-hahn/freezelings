@@ -170,7 +170,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_008 | Designer-Objekt-Container | ✅ Erledigt |
 | story_009 | Hole-Objekt | ✅ Erledigt |
 | story_010 | BreakingHole-Objekt | ✅ Erledigt |
-| story_011 | RotatingDirectionArrow-Objekt | 🟡 Bereit (nach story_008) |
+| story_011 | RotatingDirectionArrow-Objekt | ✅ Erledigt |
 
 ---
 

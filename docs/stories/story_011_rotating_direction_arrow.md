@@ -1,6 +1,6 @@
 # Story 011 – RotatingDirectionArrow-Objekt
 
-**Status**: 🟡 Bereit zur Implementierung  
+**Status**: ✅ Erledigt  
 **Priorität**: Normal  
 **Voraussetzungen**: story_008 (`DesignerObjectsContainer`), story_010 (`BreakingHole`) – die Beobachtungs-Logik per `TickManager.tick_happened` mit `CONNECT_ONE_SHOT` ist bekannt und wird hier analog eingesetzt.
 

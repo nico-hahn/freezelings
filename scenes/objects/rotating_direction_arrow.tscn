@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/rotating_direction_arrow.gd" id="1_rda"]
+[ext_resource type="Texture2D" uid="uid://yd4m4tlg22wr" path="res://assets/direction_arrows_rotating.png" id="2_tex"]
+
+[node name="RotatingDirectionArrow" type="Node2D"]
+script = ExtResource("1_rda")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+hframes = 4
+frame = 0
+
