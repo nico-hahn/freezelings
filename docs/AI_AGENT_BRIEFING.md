@@ -175,6 +175,8 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_013 | Frozen Sprite & Shiver-Animation beim Pausieren | 🟡 Bereit |
 | story_014 | Pause-Button: Whistle-Icon, Farbe & Rotations-Vibration | 🟡 Bereit |
 | story_015 | Restart-Button im HUD | 🟡 Bereit |
+| story_016 | AudioManager Autoload & Whistle-Sound | 🟡 Bereit |
+| story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | 🟡 Bereit (nach story_016) |
 
 ---
 
