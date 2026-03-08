@@ -14,7 +14,7 @@ extends Camera2D
 @export var min_zoom: Vector2 = Vector2(0.25, 0.25)
 
 ## Maximaler Zoom-Wert (weiter rein zoomen nicht möglich).
-@export var max_zoom: Vector2 = Vector2(4.0, 4.0)
+@export var max_zoom: Vector2 = Vector2(6.0, 6.0)
 
 ## Wird von game.gd gesetzt: true wenn Spieler gerade ein Objekt zum Platzieren ausgewählt hat.
 ## Wenn true, ist Panning per Linksklick deaktiviert.
