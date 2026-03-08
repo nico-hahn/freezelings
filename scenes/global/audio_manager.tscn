@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/global/audio_manager.gd" id="1_am"]
 [ext_resource type="AudioStreamWAV" uid="uid://0508bv8k7m6b" path="res://assets/sound/whistle.wav" id="2_whistle"]
+[ext_resource type="AudioStreamWAV" uid="uid://bxe70oweq2abc" path="res://assets/sound/bg-music.wav" id="3_music"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_am")
@@ -17,4 +18,8 @@ autoplay = false
 [node name="IcePlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -80.0
 autoplay = false
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_music")
+autoplay = true
 

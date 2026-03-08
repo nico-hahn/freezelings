@@ -177,6 +177,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_015 | Restart-Button im HUD | ✅ Erledigt |
 | story_016 | AudioManager Autoload & Whistle-Sound | ✅ Erledigt |
 | story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | ✅ Erledigt |
+| story_018 | Hintergrundmusik (Loop, leiser bei Tick-Pause) | 🟡 Bereit (nach story_016+017) |
 
 ---
 
