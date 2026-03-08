@@ -171,12 +171,12 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_009 | Hole-Objekt | ✅ Erledigt |
 | story_010 | BreakingHole-Objekt | ✅ Erledigt |
 | story_011 | RotatingDirectionArrow-Objekt | ✅ Erledigt |
-| story_012 | Bug: Inventar-Reset bei Level-Neustart | 🟡 Bereit |
-| story_013 | Frozen Sprite & Shiver-Animation beim Pausieren | 🟡 Bereit |
-| story_014 | Pause-Button: Whistle-Icon, Farbe & Rotations-Vibration | 🟡 Bereit |
-| story_015 | Restart-Button im HUD | 🟡 Bereit |
-| story_016 | AudioManager Autoload & Whistle-Sound | 🟡 Bereit |
-| story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | 🟡 Bereit (nach story_016) |
+| story_012 | Bug: Inventar-Reset bei Level-Neustart | ✅ Erledigt |
+| story_013 | Frozen Sprite & Shiver-Animation beim Pausieren | ✅ Erledigt |
+| story_014 | Pause-Button: Whistle-Icon, Farbe & Rotations-Vibration | ✅ Erledigt |
+| story_015 | Restart-Button im HUD | ✅ Erledigt |
+| story_016 | AudioManager Autoload & Whistle-Sound | ✅ Erledigt |
+| story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | ✅ Erledigt |
 
 ---
 
