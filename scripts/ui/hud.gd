@@ -26,6 +26,12 @@ var selected_object_type: String = ""
 ## Szene für Inventar-Slots (im Editor zuweisen)
 @export var inventory_slot_scene: PackedScene
 
+var _pause_tween: Tween = null
+
+const WOBBLE_ANGLE: float = 12.0
+const WOBBLE_SPEED: float = 0.08
+const WOBBLE_PAUSE: float = 0.25
+
 
 func _ready() -> void:
 	_pause_button.pressed.connect(_on_pause_button_pressed)
@@ -81,7 +87,30 @@ func update_inventory_count(object_type: String, count: int) -> void:
 
 ## Aktualisiert den Pause-Button-Text je nach Zustand.
 func set_paused(paused: bool) -> void:
-	_pause_button.text = "▶" if paused else "⏸"
+	if paused:
+		_start_wobble()
+	else:
+		_stop_wobble()
+
+
+func _start_wobble() -> void:
+	_stop_wobble()
+	_pause_tween = create_tween()
+	_pause_tween.set_loops()
+	_pause_tween.tween_property(_pause_button, "rotation_degrees", -WOBBLE_ANGLE, WOBBLE_SPEED)\
+		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	_pause_tween.tween_property(_pause_button, "rotation_degrees", WOBBLE_ANGLE * 2.0, WOBBLE_SPEED)\
+		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	_pause_tween.tween_property(_pause_button, "rotation_degrees", -WOBBLE_ANGLE, WOBBLE_SPEED)\
+		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	_pause_tween.tween_interval(WOBBLE_PAUSE)
+
+
+func _stop_wobble() -> void:
+	if _pause_tween != null and _pause_tween.is_valid():
+		_pause_tween.kill()
+		_pause_tween = null
+	_pause_button.rotation_degrees = 0.0
 
 
 func _on_pause_button_pressed() -> void:
