@@ -73,12 +73,14 @@ func _play_animation() -> void:
 func _on_ticks_paused() -> void:
 	_sprite.visible = false
 	_frozen_sprite.visible = true
+	_anim_player.pause()
 	_start_shiver()
 
 
 func _on_ticks_resumed() -> void:
 	_sprite.visible = true
 	_frozen_sprite.visible = false
+	_anim_player.play()
 	_stop_shiver()
 
 
@@ -86,11 +88,11 @@ func _start_shiver() -> void:
 	_stop_shiver()
 	_shiver_tween = create_tween()
 	_shiver_tween.set_loops()
-	_shiver_tween.tween_property(self, "position:x", -SHIVER_AMOUNT, SHIVER_SPEED)\
+	_shiver_tween.tween_property(_frozen_sprite, "position:x", -SHIVER_AMOUNT, SHIVER_SPEED)\
 		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	_shiver_tween.tween_property(self, "position:x", SHIVER_AMOUNT * 2.0, SHIVER_SPEED)\
+	_shiver_tween.tween_property(_frozen_sprite, "position:x", SHIVER_AMOUNT * 2.0, SHIVER_SPEED)\
 		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	_shiver_tween.tween_property(self, "position:x", -SHIVER_AMOUNT, SHIVER_SPEED)\
+	_shiver_tween.tween_property(_frozen_sprite, "position:x", -SHIVER_AMOUNT, SHIVER_SPEED)\
 		.as_relative().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 	_shiver_tween.tween_interval(SHIVER_PAUSE)
 
@@ -99,7 +101,7 @@ func _stop_shiver() -> void:
 	if _shiver_tween != null and _shiver_tween.is_valid():
 		_shiver_tween.kill()
 		_shiver_tween = null
-	position.x = 0.0
+	_frozen_sprite.position.x = 0.0
 
 
 func _on_tick_happened(_tick_number: int) -> void:
