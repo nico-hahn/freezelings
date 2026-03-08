@@ -111,27 +111,18 @@ func _initialize_progress() -> void:
 			_progress[idx] = {"stars": 0, "unlocked": idx == 0}
 
 
-## Lädt alle LevelDefinition-.tres Dateien aus resources/level_definitions/ automatisch.
-## Wird nur aufgerufen wenn level_definitions im Editor nicht manuell befüllt wurde.
+## Lädt alle LevelDefinition-.tres Dateien.
+## Explizite preload()-Aufrufe damit Godot die Dateien beim Export erkennt und mitnimmt.
+## Neue Level hier eintragen.
 func _load_definitions_from_resources() -> void:
-	var dir: DirAccess = DirAccess.open("res://resources/level_definitions/")
-	if dir == null:
-		push_error("ProgressManager: Konnte resources/level_definitions/ nicht öffnen.")
-		return
-	var files: Array[String] = []
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	while file_name != "":
-		if file_name.ends_with(".tres"):
-			files.append("res://resources/level_definitions/" + file_name)
-		file_name = dir.get_next()
-	dir.list_dir_end()
-	# Sortieren damit die Reihenfolge deterministisch ist
-	files.sort()
-	for path: String in files:
-		var def: LevelDefinition = load(path) as LevelDefinition
+	var definitions: Array[LevelDefinition] = [
+		preload("res://resources/level_definitions/level_01.tres"),
+		preload("res://resources/level_definitions/level_02.tres"),
+		preload("res://resources/level_definitions/level_03.tres"),
+		preload("res://resources/level_definitions/level_04.tres"),
+	]
+	for def in definitions:
 		if def != null:
 			level_definitions.append(def)
-	# Nach level_index sortieren
 	level_definitions.sort_custom(func(a: LevelDefinition, b: LevelDefinition) -> bool:
 		return a.level_index < b.level_index)
