@@ -12,7 +12,7 @@ enum State { INTACT, WATCHING, BROKEN }
 var _state: State = State.INTACT
 var _watched_lemming: Lemming = null
 
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var _sprite: Sprite2D = $Sprite2D
 
 
 func apply_to_lemming(lemming: Lemming) -> void:
