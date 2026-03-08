@@ -7,7 +7,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_ccmqc"]
 font = ExtResource("3_7l8mc")
 font_size = 120
-font_color = Color(0.6, 0.94509804, 0.96862745, 1)
+font_color = Color(0.4402, 0.69201326, 0.71, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7l8mc"]
 font = ExtResource("3_7l8mc")
