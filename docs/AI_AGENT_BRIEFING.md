@@ -173,7 +173,8 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_011 | RotatingDirectionArrow-Objekt | ✅ Erledigt |
 | story_012 | Bug: Inventar-Reset bei Level-Neustart | 🟡 Bereit |
 | story_013 | Frozen Sprite & Shiver-Animation beim Pausieren | 🟡 Bereit |
-| story_014 | Pause-Button: Whistle-Icon, Farbe & Rotations-Vibration | ✅ Erledigt |
+| story_014 | Pause-Button: Whistle-Icon, Farbe & Rotations-Vibration | 🟡 Bereit |
+| story_015 | Restart-Button im HUD | 🟡 Bereit |
 
 ---
 
