@@ -97,10 +97,10 @@ Main (Node)
 
 ### `game.tscn`
 ```
-Game (Node2D)
-├── Camera2D
-├── LevelRoot (Node2D)           # Hier wird die Level-.tscn instanziert
-└── HUD (CanvasLayer)            # hud.tscn
+Game (Node2D)                    # Script: game.gd
+├── LevelRoot (Node2D)           # Hier wird die Level-.tscn instanziert (Camera2D sitzt im Level!)
+├── HUD (CanvasLayer)            # hud.tscn
+└── WinLossScreen (CanvasLayer)  # win_loss_screen.tscn
 ```
 
 ### `level_base.tscn` (Template – alle Level erben hiervon)
@@ -112,17 +112,18 @@ LevelBase (Node2D)               # Script: level_controller.gd
 │   @export starting_inventory: Dictionary = {}
 │   @export start_direction: Enums.Direction = Direction.EAST
 │
-├── Ground (TileMapLayer)        # Rein visuell (Boden-Dekoration)
-│                                # tile_set = dungeon_tiles.tres; keine Spiellogik
-│                                # Steht VOR Walls im Baum → wird darunter gerendert
+├── Camera2D                     # Script: level_camera.gd (Pan & Zoom)
+├── Ground (TileMapLayer)        # Rein visuell (Boden-Dekoration). Hat keinerlei Gameplay-Einfluss.
+│                                # tile_set = dungeon_tiles.tres; steht VOR Walls → wird darunter gerendert
 ├── Walls (TileMapLayer)         # Spiellogik: leere Zelle = begehbar, Tile = Wand
 │                                # tile_set = dungeon_tiles.tres (gleiche Resource wie Ground)
 ├── Markers (Node2D)
 │   ├── EntryPoint (Marker2D)    # Position des Eingangs
 │   └── ExitPoint (Marker2D)     # Position des Ausgangs
 ├── LemmingSpawner               # scenes/entities/lemming_spawner.tscn
+├── DesignerObjectsContainer (Node2D)  # Nicht-entfernbare Designer-Objekte; steht VOR LemmingsContainer → rendert darunter
 ├── LemmingsContainer (Node2D)   # Lemminge werden hier gespawnt
-└── PlacedObjectsContainer (Node2D) # Platzierte Objekte landen hier
+└── PlacedObjectsContainer (Node2D)   # Spieler-platzierte Objekte
 ```
 
 Neue Level werden als **Inherited Scene** von `level_base.tscn` angelegt
@@ -165,7 +166,9 @@ HUD (CanvasLayer)                # Script: hud.gd
 Siehe `docs/SIGNALS_AND_APIS.md` für die vollständige Liste.
 
 Kurzübersicht:
-- `TickManager.tick_happened` → alle Lemminge und der Spawner reagieren
+- `TickManager.tick_happened` → `LemmingSpawner` (Spawn-Logik) + `LevelController` (koordiniert Zwei-Phasen-Bewegung aller Lemminge)
+- `LevelController._on_tick_happened()` → ruft erst alle `Lemming.phase_1_plan()`, dann alle `Lemming.phase_2_commit()` auf
+- Lemminge verbinden sich **nicht** direkt mit `TickManager.tick_happened`
 - `Lemming.reached_exit(lemming)` → `GameManager` zählt gerettete Lemminge
 - `Lemming.died(lemming)` → `GameManager` zählt tote Lemminge
 - `GameManager.game_state_changed(state)` → HUD aktualisiert sich

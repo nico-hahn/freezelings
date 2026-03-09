@@ -107,7 +107,7 @@ Siehe `docs/IMPLEMENTATION_ORDER.md` für die vollständige Phasen-Planung.
 2. **Objekt-Effekte gelten ab dem nächsten Tick** (Lemming betritt Tile → nächster Tick mit neuer Richtung)
 3. **Blocker wird in `is_tile_walkable()` geprüft**, nicht in `apply_to_lemming()`
 4. **Pause stoppt NUR den TickManager-Timer**, nicht den SceneTree → UI bleibt interaktiv
-5. **Mehrere Lemminge können dasselbe Tile teilen** (kein Konflikt)
+5. **Lemminge können dasselbe Tile NICHT teilen** – ein Lemming auf einem Tile wirkt wie eine Wand (180°-Umkehr). Zwei gegenüberstehende Lemminge prallen beide ab. Basis: Snapshot der Positionen zu Tick-Beginn (Zwei-Phasen-Bewegung). Spawn verzögert sich wenn Entry-Tile belegt ist. Lemming-Positionen werden **nicht** in `is_tile_walkable()` geprüft – Objekte dürfen unter Lemmingen platziert werden. Siehe story_019.
 6. **Leere TileMapLayer-Zelle = begehbar**, belegte Zelle = Wand
 7. **Rechtsklick entfernt platzierte Objekte** und gibt sie ins Inventar zurück
 
@@ -117,8 +117,10 @@ Siehe `docs/IMPLEMENTATION_ORDER.md` für die vollständige Phasen-Planung.
 
 ```
 TickManager.tick_happened
-    → LemmingSpawner._on_tick_happened()   (spawnt ggf. neuen Lemming)
-    → Lemming._on_tick_happened()           (alle aktiven Lemminge bewegen sich)
+    → LemmingSpawner._on_tick_happened()         (spawnt ggf. neuen Lemming; verzögert wenn Entry-Tile belegt)
+    → LevelController._on_tick_happened()        (koordiniert Zwei-Phasen-Bewegung aller Lemminge)
+         → Phase 1: alle Lemming.phase_1_plan()  (Ziel berechnen, Snapshot-basiert, grid_pos noch nicht ändern)
+         → Phase 2: alle Lemming.phase_2_commit() (grid_pos setzen, Tween starten, Exit/Objekt prüfen)
 
 Lemming.reached_exit
     → LevelController                       (Lemming queue_free, GameManager.on_lemming_saved())
@@ -178,6 +180,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_016 | AudioManager Autoload & Whistle-Sound | ✅ Erledigt |
 | story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | ✅ Erledigt |
 | story_018 | Hintergrundmusik (Loop, leiser bei Tick-Pause) | ✅ Erledigt |
+| story_019 | Lemming-Kollision: keine Tile-Teilung, Zwei-Phasen-Bewegung | 🟡 Bereit |
 
 ---
 

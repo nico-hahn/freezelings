@@ -87,7 +87,7 @@ Konkrete Aufgaben mit Dateinamen, Node-Hierarchien, Code-Snippets als Referenz.
 2. Objekt-Effekte gelten **ab dem nächsten Tick** (nicht sofort)
 3. Blocker wird in `is_tile_walkable()` geprüft, nicht in `apply_to_lemming()`
 4. Pause stoppt **nur den TickManager-Timer**, nicht den SceneTree → UI bleibt interaktiv
-5. Mehrere Lemminge können **dasselbe Tile teilen**
+5. Lemminge können miteinander kollidieren - sie drehen dann 180°
 6. **Leere TileMapLayer-Zelle = begehbar**, belegte Zelle = Wand
 7. **Rechtsklick/Linksklick** (auf ein platziertes Objekt) entfernt platzierte Objekte und gibt sie ins Inventar zurück
 8. **`level_base.tscn`** ist Template – alle Level erben davon (Inherited Scene)

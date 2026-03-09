@@ -116,6 +116,9 @@ func initialize_level(total: int, required: int) -> void
 ### Interner Zustand
 ```gdscript
 var placed_objects: Dictionary = {}    # Vector2i -> PlaceableObject-Node
+var designer_objects: Dictionary = {}  # Vector2i -> PlaceableObject-Node (nicht entfernbar)
+var lemming_positions: Dictionary = {} # Vector2i -> Lemming (aktuell belegte Tiles)
+var _active_lemmings: Array[Lemming] = []  # Alle lebenden Lemminge (für Tick-Koordination)
 var _walls_layer: TileMapLayer         # Referenz auf TileMapLayer "Walls"
 var _entry_point: Marker2D
 var _exit_point: Marker2D
@@ -127,7 +130,9 @@ var _placed_objects_container: Node2D
 ### Methoden
 ```gdscript
 func _ready() -> void                  # Findet alle Kind-Nodes, initialisiert GameManager
-func is_tile_walkable(grid_pos: Vector2i) -> bool
+func _on_tick_happened(tick_number: int) -> void  # Koordiniert Zwei-Phasen-Bewegung aller Lemminge
+func is_tile_walkable(grid_pos: Vector2i) -> bool  # Prüft Wände + Blocker (KEINE Lemminge!)
+func is_tile_occupied_by_lemming(grid_pos: Vector2i) -> bool  # Prüft lemming_positions
 func is_tile_exit(grid_pos: Vector2i) -> bool
 func has_placed_object(grid_pos: Vector2i) -> bool
 func get_placed_object(grid_pos: Vector2i) -> PlaceableObject
@@ -135,6 +140,9 @@ func place_object(grid_pos: Vector2i, object_scene: PackedScene) -> bool
 func remove_object(grid_pos: Vector2i) -> void
 func world_to_grid(world_pos: Vector2) -> Vector2i
 func grid_to_world(grid_pos: Vector2i) -> Vector2
+func register_lemming_position(lemming: Lemming) -> void   # In lemming_positions eintragen
+func unregister_lemming_position(lemming: Lemming) -> void # Aus lemming_positions entfernen
+func add_active_lemming(lemming: Lemming) -> void          # In _active_lemmings eintragen
 ```
 
 ### TileMap-Konvention
@@ -165,6 +173,7 @@ var spawn_interval: int = 3
 var total_lemmings: int = 10
 var start_direction: Enums.Direction = Enums.Direction.EAST
 var spawned_count: int = 0
+var _pending_spawn: bool = false   # true wenn Spawn aufgeschoben wurde weil Entry-Tile belegt war
 
 @export var lemming_scene: PackedScene   # Referenz auf lemming.tscn
 ```
@@ -172,9 +181,12 @@ var spawned_count: int = 0
 ### Methoden
 ```gdscript
 func initialize(entry_pos: Vector2i, interval: int, total: int, direction: Enums.Direction) -> void
-func _on_tick_happened(tick_number: int) -> void    # Verbunden mit TickManager
+func _on_tick_happened(tick_number: int) -> void    # Verbunden mit TickManager; handhabt verzögerten Spawn
 func _spawn_lemming() -> void
 ```
+
+### Spawn-Verzögerung
+Ist das Entry-Tile zum Spawn-Zeitpunkt durch einen anderen Lemming belegt, wird `_pending_spawn = true` gesetzt. Der nächste Tick versucht den Spawn erneut – der Lemming geht nicht verloren.
 
 ---
 
@@ -195,6 +207,8 @@ var grid_pos: Vector2i
 var direction: Enums.Direction
 var state: Enums.LemmingState = Enums.LemmingState.ALIVE
 var _level_controller: LevelController   # Referenz, gesetzt beim Spawnen
+var _intended_pos: Vector2i              # Geplante Zielposition (Phase 1)
+var _will_move: bool = false             # Ob Bewegung in Phase 2 ausgeführt wird
 ```
 
 ### Signale
@@ -206,25 +220,37 @@ signal died(lemming: Lemming)
 ### Methoden
 ```gdscript
 func initialize(start_pos: Vector2i, start_dir: Enums.Direction, level: LevelController) -> void
-func _on_tick_happened(tick_number: int) -> void    # Verbunden mit TickManager
-func _process_movement() -> void
-func _apply_direction(new_dir: Enums.Direction) -> void
-func _animate_to(target_world_pos: Vector2) -> void  # Tween-Animation
+func phase_1_plan(snapshot: Dictionary) -> void   # Zielposition berechnen (grid_pos noch nicht ändern!)
+func phase_2_commit() -> void                     # Bewegung ausführen, Richtung oder Exit/Objekt prüfen
+func _animate_to(from_pos: Vector2, to_pos: Vector2) -> void  # Tween-Animation
 ```
 
-### Bewegungslogik pro Tick
+**Hinweis**: Lemminge verbinden sich **nicht** mit `TickManager.tick_happened`. Die Tick-Koordination übernimmt ausschließlich `LevelController._on_tick_happened()`.
+
+### Bewegungslogik (Zwei-Phasen pro Tick)
+
+**Phase 1 – `phase_1_plan(snapshot)`** (alle Lemminge gleichzeitig, snapshot = Kopie von `lemming_positions` zu Tick-Beginn):
 ```
 1. Falls state != ALIVE: return
-2. Zielposition = grid_pos + Direction.to_vector(direction)
-3. Wenn _level_controller.is_tile_walkable(zielposition):
-     a. grid_pos = zielposition
-     b. _animate_to(grid_to_world(grid_pos))
-     c. Wenn is_tile_exit(grid_pos): emit reached_exit; state = EXITING; return
-     d. Wenn has_placed_object(grid_pos):
-          object = get_placed_object(grid_pos)
-          object.apply_to_lemming(self)
-4. Wenn NICHT walkable:
-     direction = Direction.opposite(direction)
+2. target_pos = grid_pos + direction_to_vector(direction)
+3. Wenn is_tile_walkable(target_pos) AND NOT snapshot.has(target_pos):
+     _will_move = true; _intended_pos = target_pos
+4. Sonst:
+     _will_move = false
+```
+
+**Phase 2 – `phase_2_commit()`** (alle Lemminge gleichzeitig, nachdem Phase 1 für ALLE abgeschlossen):
+```
+1. Falls state != ALIVE: return
+2. Wenn _will_move:
+     a. unregister_lemming_position(self)
+     b. grid_pos = _intended_pos
+     c. register_lemming_position(self)
+     d. _animate_to(old_pos, grid_to_world(grid_pos))
+     e. Wenn is_tile_exit(grid_pos): state = EXITING; unregister; _start_exit_animation(); return
+     f. Wenn has_placed_object(grid_pos): obj.apply_to_lemming(self)
+3. Wenn NOT _will_move:
+     direction = opposite_direction(direction)
 ```
 
 ---

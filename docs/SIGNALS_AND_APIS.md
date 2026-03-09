@@ -79,7 +79,8 @@ Dient als Vertrag zwischen den Systemen für die Implementierung.
 ### Methoden (öffentlich)
 | Methode | Rückgabe | Beschreibung |
 |---------|----------|--------------|
-| `is_tile_walkable(grid_pos: Vector2i)` | `bool` | Prüft ob Tile begehbar |
+| `is_tile_walkable(grid_pos: Vector2i)` | `bool` | Prüft ob Tile begehbar (Wände + Blocker). **Lemminge werden hier nicht geprüft** – damit Objekte unter Lemmingen platziert werden dürfen |
+| `is_tile_occupied_by_lemming(grid_pos: Vector2i)` | `bool` | Prüft ob ein Lemming das Tile belegt (nur für Lemming→Lemming-Kollision) |
 | `is_tile_exit(grid_pos: Vector2i)` | `bool` | Prüft ob Tile Ausgang ist |
 | `has_placed_object(grid_pos: Vector2i)` | `bool` | Prüft ob Objekt auf Tile |
 | `get_placed_object(grid_pos: Vector2i)` | `PlaceableObject\|null` | Gibt Objekt zurück |
@@ -89,6 +90,9 @@ Dient als Vertrag zwischen den Systemen für die Implementierung.
 | `grid_to_world(grid_pos: Vector2i)` | `Vector2` | Grid → Weltkoordinaten (Tile-Mittelpunkt) |
 | `get_entry_grid_pos()` | `Vector2i` | Gibt EntryPoint als Grid-Position zurück |
 | `get_exit_grid_pos()` | `Vector2i` | Gibt ExitPoint als Grid-Position zurück |
+| `register_lemming_position(lemming: Lemming)` | `void` | Trägt Lemming in `lemming_positions` ein (aufgerufen von Lemming nach Bewegung) |
+| `unregister_lemming_position(lemming: Lemming)` | `void` | Entfernt Lemming aus `lemming_positions` (vor Bewegung/Tod/Exit) |
+| `add_active_lemming(lemming: Lemming)` | `void` | Trägt neuen Lemming in `_active_lemmings` ein (aufgerufen vom Spawner) |
 
 ### Benötigte Kind-Nodes (by name)
 | Node-Name | Typ | Beschreibung |
@@ -113,7 +117,11 @@ Dient als Vertrag zwischen den Systemen für die Implementierung.
 ### Methoden (öffentlich)
 | Methode | Rückgabe | Beschreibung |
 |---------|----------|--------------|
-| `initialize(start_pos: Vector2i, start_dir: Enums.Direction, level: Node)` | `void` | Muss nach Instanzierung aufgerufen werden |
+| `initialize(start_pos: Vector2i, start_dir: Enums.Direction, level: Node)` | `void` | Muss nach Instanzierung aufgerufen werden; registriert Lemming in `lemming_positions` |
+| `phase_1_plan(snapshot: Dictionary)` | `void` | Berechnet Zielposition anhand Snapshot; ändert `grid_pos` noch nicht |
+| `phase_2_commit()` | `void` | Führt Bewegung aus oder dreht um; wird von LevelController koordiniert |
+
+> **Wichtig**: Lemminge verbinden sich **nicht** selbst mit `TickManager.tick_happened`. Die Koordination übernimmt `LevelController._on_tick_happened()`.
 
 ### Properties (lesen/schreiben – von apply_to_lemming aus)
 | Property | Typ | Beschreibung |
@@ -160,13 +168,22 @@ Dient als Vertrag zwischen den Systemen für die Implementierung.
 
 ```
 TickManager.tick_happened ──→ LemmingSpawner._on_tick_happened()
-TickManager.tick_happened ──→ Lemming._on_tick_happened()  (für jeden aktiven Lemming)
+                               (spawnt Lemming; verzögert wenn Entry-Tile belegt)
+TickManager.tick_happened ──→ LevelController._on_tick_happened()
+                               (koordiniert Zwei-Phasen-Bewegung aller Lemminge)
+                                   → Phase 1: alle Lemming.phase_1_plan(snapshot)
+                                   → Phase 2: alle Lemming.phase_2_commit()
 TickManager.paused        ──→ HUD.set_paused(true)
 TickManager.resumed       ──→ HUD.set_paused(false)
 
-Lemming.reached_exit      ──→ LevelController → GameManager.on_lemming_saved()
-Lemming.died              ──→ LevelController → GameManager.on_lemming_died()
+Lemming.reached_exit      ──→ LevelController._on_lemming_reached_exit()
+                               → _active_lemmings.erase(); unregister_lemming_position()
+                               → GameManager.on_lemming_saved(); lemming.queue_free()
+Lemming.died              ──→ LevelController._on_lemming_died()
+                               → _active_lemmings.erase(); unregister_lemming_position()
+                               → GameManager.on_lemming_died(); lemming.queue_free()
 LemmingSpawner            ──→ GameManager.on_lemming_spawned() (beim Spawnen)
+LemmingSpawner            ──→ LevelController.add_active_lemming() (beim Spawnen)
 
 GameManager.lemming_counts_changed ──→ HUD (Label aktualisieren)
 GameManager.game_state_changed     ──→ HUD, Game
