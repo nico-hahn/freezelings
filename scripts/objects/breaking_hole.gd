@@ -59,4 +59,3 @@ func _kill_lemming(lemming: Lemming) -> void:
 
 func get_object_type() -> String:
 	return "breaking_hole"
-
