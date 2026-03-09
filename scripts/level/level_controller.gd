@@ -51,6 +51,13 @@ var placed_objects: Dictionary = {}
 ## Der Spieler kann diese Objekte nicht entfernen.
 var designer_objects: Dictionary = {}
 
+## Aktuell belegte Tiles: Vector2i → Lemming-Instanz.
+## Wird von Lemming-Instanzen selbst gepflegt (register/unregister).
+var lemming_positions: Dictionary = {}
+
+## Alle aktuell lebenden Lemminge (für Tick-Koordination).
+var _active_lemmings: Array[Lemming] = []
+
 ## Grid-Position des Ausgangs (gecacht für schnellen Zugriff)
 var _exit_grid_pos: Vector2i
 
@@ -78,6 +85,9 @@ func _ready() -> void:
 	# Designer-Objekte einlesen
 	_load_designer_objects()
 
+	# Tick-Koordination: LevelController feuert nach Spawner (Spawner ist Kind → earlier _ready)
+	TickManager.tick_happened.connect(_on_tick_happened)
+
 	# TickManager starten und sofort pausieren – Spieler startet manuell
 	TickManager.start()
 	TickManager.pause()
@@ -91,6 +101,52 @@ func _load_designer_objects() -> void:
 			var grid_pos_obj: Vector2i = world_to_grid(obj.global_position)
 			obj.grid_pos = grid_pos_obj
 			designer_objects[grid_pos_obj] = obj
+
+
+## Zwei-Phasen-Tick: erst alle Lemminge planen, dann Konflikte auflösen, dann committen.
+func _on_tick_happened(_tick_number: int) -> void:
+	# Snapshot der Positionen zu Tick-Beginn – unveränderlich für alle Phase-1-Entscheidungen
+	var snapshot: Dictionary = lemming_positions.duplicate()
+
+	# Phase 1: Alle Lemminge berechnen ihre beabsichtigte Zielposition
+	for lemming: Lemming in _active_lemmings.duplicate():
+		lemming.phase_1_plan(snapshot)
+
+	# Konfliktauflösung: Mehrere Lemminge wollen dasselbe Tile → alle drehen um
+	var intended_counts: Dictionary = {}
+	for lemming: Lemming in _active_lemmings:
+		if lemming.will_move:
+			var t: Vector2i = lemming.intended_pos
+			intended_counts[t] = intended_counts.get(t, 0) + 1
+	for lemming: Lemming in _active_lemmings:
+		if lemming.will_move and intended_counts.get(lemming.intended_pos, 0) > 1:
+			lemming.will_move = false
+
+	# Phase 2: Alle Lemminge führen ihre Bewegung aus (oder drehen um)
+	for lemming: Lemming in _active_lemmings.duplicate():
+		lemming.phase_2_commit()
+
+
+## Fügt einen Lemming zur aktiven Liste hinzu.
+func add_active_lemming(lemming: Lemming) -> void:
+	_active_lemmings.append(lemming)
+
+
+## Registriert einen Lemming an seiner grid_pos.
+func register_lemming_position(lemming: Lemming) -> void:
+	lemming_positions[lemming.grid_pos] = lemming
+
+
+## Entfernt einen Lemming aus dem Positions-Dictionary.
+func unregister_lemming_position(lemming: Lemming) -> void:
+	if lemming_positions.get(lemming.grid_pos) == lemming:
+		lemming_positions.erase(lemming.grid_pos)
+
+
+## Gibt true zurück wenn ein anderer Lemming das Tile belegt.
+## Nicht in is_tile_walkable() – nur für Lemming-zu-Lemming-Kollision.
+func is_tile_occupied_by_lemming(grid_pos: Vector2i) -> bool:
+	return lemming_positions.has(grid_pos)
 
 
 ## Gibt true zurück wenn das Tile begehbar ist (kein Wand-Tile, kein Blocker).
@@ -179,6 +235,8 @@ func get_exit_grid_pos() -> Vector2i:
 ## Aufgerufen wenn ein Lemming den Ausgang erreicht hat.
 ## Verbunden in LemmingSpawner._spawn_lemming() für jede Lemming-Instanz.
 func _on_lemming_reached_exit(lemming: Lemming) -> void:
+	_active_lemmings.erase(lemming)
+	unregister_lemming_position(lemming)
 	GameManager.on_lemming_saved()
 	lemming.queue_free()
 
@@ -186,6 +244,8 @@ func _on_lemming_reached_exit(lemming: Lemming) -> void:
 ## Aufgerufen wenn ein Lemming gestorben ist.
 ## Verbunden in LemmingSpawner._spawn_lemming() für jede Lemming-Instanz.
 func _on_lemming_died(lemming: Lemming) -> void:
+	_active_lemmings.erase(lemming)
+	unregister_lemming_position(lemming)
 	GameManager.on_lemming_died()
 	lemming.queue_free()
 

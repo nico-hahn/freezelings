@@ -180,7 +180,7 @@ Vollständige Beschreibungen in `docs/stories/`.
 | story_016 | AudioManager Autoload & Whistle-Sound | ✅ Erledigt |
 | story_017 | Wind & Ice Ambient-Sounds (Pause-gesteuert) | ✅ Erledigt |
 | story_018 | Hintergrundmusik (Loop, leiser bei Tick-Pause) | ✅ Erledigt |
-| story_019 | Lemming-Kollision: keine Tile-Teilung, Zwei-Phasen-Bewegung | 🟡 Bereit |
+| story_019 | Lemming-Kollision: keine Tile-Teilung, Zwei-Phasen-Bewegung | ✅ Erledigt |
 
 ---
 

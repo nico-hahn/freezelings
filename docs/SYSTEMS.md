@@ -130,7 +130,7 @@ var _placed_objects_container: Node2D
 ### Methoden
 ```gdscript
 func _ready() -> void                  # Findet alle Kind-Nodes, initialisiert GameManager
-func _on_tick_happened(tick_number: int) -> void  # Koordiniert Zwei-Phasen-Bewegung aller Lemminge
+func _on_tick_happened(_tick_number: int) -> void:  # Koordiniert Zwei-Phasen-Bewegung aller Lemminge
 func is_tile_walkable(grid_pos: Vector2i) -> bool  # Prüft Wände + Blocker (KEINE Lemminge!)
 func is_tile_occupied_by_lemming(grid_pos: Vector2i) -> bool  # Prüft lemming_positions
 func is_tile_exit(grid_pos: Vector2i) -> bool
@@ -231,15 +231,22 @@ func _animate_to(from_pos: Vector2, to_pos: Vector2) -> void  # Tween-Animation
 
 **Phase 1 – `phase_1_plan(snapshot)`** (alle Lemminge gleichzeitig, snapshot = Kopie von `lemming_positions` zu Tick-Beginn):
 ```
-1. Falls state != ALIVE: return
+1. Falls state != ALIVE: will_move = false; return
 2. target_pos = grid_pos + direction_to_vector(direction)
 3. Wenn is_tile_walkable(target_pos) AND NOT snapshot.has(target_pos):
-     _will_move = true; _intended_pos = target_pos
+     will_move = true; intended_pos = target_pos
 4. Sonst:
-     _will_move = false
+     will_move = false
 ```
 
-**Phase 2 – `phase_2_commit()`** (alle Lemminge gleichzeitig, nachdem Phase 1 für ALLE abgeschlossen):
+**Konfliktauflösung (LevelController, zwischen Phase 1 und 2):**
+```
+Zähle für jedes intended_pos wie viele Lemminge es beanspruchen.
+Alle Lemminge die auf ein umkämpftes Tile wollen → will_move = false
+(Beispiel: A auf Tile 1 → 2, B auf Tile 3 → 2: beide drehen um)
+```
+
+**Phase 2 – `phase_2_commit()`** (alle Lemminge gleichzeitig, nachdem Phase 1 und Konfliktauflösung für ALLE abgeschlossen):
 ```
 1. Falls state != ALIVE: return
 2. Wenn _will_move:

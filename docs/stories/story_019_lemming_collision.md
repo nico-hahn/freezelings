@@ -1,6 +1,6 @@
 # Story 019 – Lemming-Kollision (keine Tile-Teilung)
 
-**Status**: 🟡 Bereit zur Implementierung
+**Status**: ✅ Erledigt
 **Priorität**: Hoch
 **Voraussetzungen**: Keine (betrifft Kernsysteme)
 
@@ -26,6 +26,12 @@ Gegenüber-Szenario (A→B, B→A) funktioniert mit sofortigem Update scheinbar:
 Aber: Folge-Szenario (A will auf Tile 6, B steht auf 6 und will auf 7): A wird zuerst verarbeitet, sieht B auf 6 → dreht um. B wird danach verarbeitet, geht auf 7 und setzt `grid_pos = 7` sofort. A hat also auf Basis einer Information gedreht, die im selben Tick überholt wurde – B war gar nicht mehr auf 6. Das Ergebnis ist reihenfolgeabhängig und falsch.
 
 **Nur ein Snapshot zu Tick-Beginn** (bevor irgendein Lemming `grid_pos` ändert) garantiert konsistentes, reihenfolgeunabhängiges Verhalten. Das erfordert zwingend, dass alle `grid_pos`-Updates nach allen Entscheidungen erfolgen → Zwei-Phasen.
+
+**Dritter Problemfall – Konvergenz auf dasselbe freie Tile (Pflicht-Erweiterung):**
+
+Tile 1: Lemming A (will Ost → Tile 2), Tile 2: leer, Tile 3: Lemming B (will West → Tile 2). Snapshot zeigt Tile 2 als frei → beide setzen `_will_move = true`, `_intended_pos = 2`. In Phase 2 würden beide auf Tile 2 landen – **Bug**.
+
+Lösung: Zwischen Phase 1 und Phase 2 führt der LevelController eine **Konfliktauflösung** durch. Er zählt wie viele Lemminge dasselbe `_intended_pos` beanspruchen. Alle Lemminge die auf ein umkämpftes Tile wollen, bekommen `_will_move = false` gesetzt → beide drehen um. Das ist konsistent mit dem generellen Prinzip: kein Tile wird jemals von zwei Lemmingen gleichzeitig belegt.
 
 **Reihenfolge LemmingSpawner vs. LevelController**: Der Spawner verbindet sich in `_ready()` mit `TickManager.tick_happened`, der LevelController ebenfalls. Godot feuert Signale in Verbindungsreihenfolge. Da der Spawner-Node vor dem LevelController-Script `_ready()` aufruft (Spawner ist Kind-Node, feuert `_ready()` vor dem Parent? → Nein, in Godot 4 feuert der Parent `_ready()` **nach** allen Kindern). Das bedeutet: **LevelController registriert sich als letzter** → feuert als letzter. Spawner feuert zuerst. ✅ Das ist korrekt – neu gespawnte Lemminge werden via `add_active_lemming()` in `_active_lemmings` eingetragen und sind **im selben Tick noch nicht Teil der Zwei-Phasen-Schleife** (da `_active_lemmings` beim Snapshot-Zeitpunkt noch nicht den neuen Lemming enthält). Das ist gewolltes Verhalten: ein frisch gespawnter Lemming bewegt sich erst im **nächsten** Tick. Falls die Reihenfolge jemals unsicher ist, soll der Agent die Verbindung des LevelControllers explizit nach dem Spawner registrieren oder `CONNECT_DEFERRED` verwenden.
 
@@ -105,30 +111,30 @@ Dazu:
 - `_on_tick_happened()` wird **entfernt** (LevelController ruft direkt auf)
 
 ```gdscript
-# Neue interne Variablen:
-var _intended_pos: Vector2i
-var _will_move: bool = false
+# Neue interne Variablen (public, da LevelController für Konfliktauflösung darauf zugreift):
+var intended_pos: Vector2i
+var will_move: bool = false
 
 func phase_1_plan(snapshot: Dictionary) -> void:
     if state != Enums.LemmingState.ALIVE:
         return
     var move_vec: Vector2i = Enums.direction_to_vector(direction)
     var target_pos: Vector2i = grid_pos + move_vec
-    _intended_pos = target_pos
+    intended_pos = target_pos
 
     if _level_controller.is_tile_walkable(target_pos) and not snapshot.has(target_pos):
-        _will_move = true
+        will_move = true
     else:
-        _will_move = false
+        will_move = false
 
 func phase_2_commit() -> void:
     if state != Enums.LemmingState.ALIVE:
         return
     _play_animation()
-    if _will_move:
+    if will_move:
         var old_visual_pos: Vector2 = global_position
         _level_controller.unregister_lemming_position(self)
-        grid_pos = _intended_pos
+        grid_pos = intended_pos
         _level_controller.register_lemming_position(self)
         var new_world_pos: Vector2 = _level_controller.grid_to_world(grid_pos)
         _animate_to(old_visual_pos, new_world_pos)
@@ -169,13 +175,23 @@ Alternativ: `_level_controller.unregister_lemming_position(self)` direkt in `_on
 ## Alle aktuell lebenden Lemminge (für Tick-Koordination).
 var _active_lemmings: Array[Lemming] = []
 
-func _on_tick_happened(tick_number: int) -> void:
+func _on_tick_happened(_tick_number: int) -> void:
     # Snapshot der Positionen zu Tick-Beginn
     var snapshot: Dictionary = lemming_positions.duplicate()
 
     # Phase 1: Alle Lemminge planen ihre Bewegung
     for lemming in _active_lemmings:
         lemming.phase_1_plan(snapshot)
+
+    # Konfliktauflösung: Mehrere Lemminge wollen dasselbe Tile → alle drehen um
+    var intended_counts: Dictionary = {}  # Vector2i → int
+    for lemming in _active_lemmings:
+        if lemming.will_move:
+            var t: Vector2i = lemming.intended_pos
+            intended_counts[t] = intended_counts.get(t, 0) + 1
+    for lemming in _active_lemmings:
+        if lemming.will_move and intended_counts.get(lemming.intended_pos, 0) > 1:
+            lemming.will_move = false
 
     # Phase 2: Alle Lemminge committen ihre Bewegung
     for lemming in _active_lemmings:
@@ -259,6 +275,7 @@ func _on_lemming_died(lemming: Lemming) -> void:
 
 - [ ] Zwei Lemminge können sich nicht mehr dasselbe Tile teilen – ein ankommender Lemming dreht 180° um
 - [ ] Wenn zwei Lemminge aufeinander zulaufen (Gegenüber in benachbarten Tiles), drehen **beide** in demselben Tick um – kein visuelles Durcheinanderlaufen
+- [ ] Wenn zwei Lemminge dasselbe freie Tile als Ziel wählen (z.B. A auf Tile 1 → Tile 2, B auf Tile 3 → Tile 2), drehen **beide** um – kein Tile wird von mehr als einem Lemming gleichzeitig belegt
 - [ ] Die Entscheidung basiert auf dem Positions-Snapshot zu Tick-Beginn – `grid_pos` wird erst in Phase 2 aktualisiert
 - [ ] `is_tile_walkable()` bleibt unverändert – Lemming-Positionen werden dort **nicht** geprüft
 - [ ] Ein Objekt kann unter einem Lemming platziert werden (Lemming blockiert `place_object()` nicht)

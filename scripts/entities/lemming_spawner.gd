@@ -13,6 +13,7 @@ var _spawn_interval: int
 var _total_lemmings: int
 var _start_direction: Enums.Direction
 var _spawned_count: int = 0
+var _pending_spawn: bool = false
 var _level_controller: LevelController
 var _lemmings_container: Node2D
 
@@ -35,11 +36,18 @@ func initialize(
 
 
 func _on_tick_happened(tick_number: int) -> void:
-	if _spawned_count >= _total_lemmings:
+	if _spawned_count >= _total_lemmings and not _pending_spawn:
 		return
-	# Spawne beim ersten Tick und dann alle N Ticks
-	if tick_number == 1 or (tick_number - 1) % _spawn_interval == 0:
-		_spawn_lemming()
+	var should_spawn: bool = _pending_spawn \
+		or tick_number == 1 \
+		or (tick_number - 1) % _spawn_interval == 0
+
+	if should_spawn:
+		if _level_controller.is_tile_occupied_by_lemming(_entry_pos):
+			_pending_spawn = true
+		else:
+			_pending_spawn = false
+			_spawn_lemming()
 
 
 func _spawn_lemming() -> void:
@@ -52,6 +60,9 @@ func _spawn_lemming() -> void:
 	# Lemming initialisieren
 	var lemming_script: Lemming = lemming as Lemming
 	lemming_script.initialize(_entry_pos, _start_direction, _level_controller)
+
+	# Lemming in Tick-Koordination aufnehmen
+	_level_controller.add_active_lemming(lemming_script)
 
 	# Lemming-Signale mit LevelController verbinden (Schritt 11)
 	lemming_script.reached_exit.connect(_level_controller._on_lemming_reached_exit)
