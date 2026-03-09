@@ -74,15 +74,7 @@ Top-down Lemmings-Klon in Godot 4.5. Lemminge laufen durch einen Dungeon, der Sp
 | `resources/level_definitions/level_01.tres` | LevelDefinition für Level 01 – Story 004 ✅ |
 
 ### ❌ Noch zu erstellen
-*Alle Szenen und Resources für Phase 1–4 sind vorhanden. Fehlende Inhalte betreffen Phase 5–6:*
-| Thema | Story | Beschreibung |
-|-------|-------|-------------|
-| LevelDefinition + ProgressManager | story_004 | Resource-Klasse + Autoload für Level-Registry & Fortschritt |
-| LevelProgress SaveData | story_005 | Persistenz via JSON in `user://save_data.json` |
-| Stern-Bewertung + Win/Loss-Screen | story_006 | Sterne-Berechnung, Win/Loss-Overlay, Neustart-Button |
-| Level-Auswahl | story_007 | `level_select.tscn` als Entry-Point, Level-Karten-Grid |
-| Designer-Objekt-Container | story_008 | `DesignerObjectsContainer` in level_base + LevelController-Logik |
-| Hole-Objekt | story_009 | Lemminge sterben mit Schrumpf-Animation; Designer-Only-Objekt |
+*Alle Stories bis story_019 sind implementiert. Keine offenen Punkte aus dem Backlog.*
 
 
 ---
@@ -110,6 +102,20 @@ Siehe `docs/IMPLEMENTATION_ORDER.md` für die vollständige Phasen-Planung.
 5. **Lemminge können dasselbe Tile NICHT teilen** – ein Lemming auf einem Tile wirkt wie eine Wand (180°-Umkehr). Zwei gegenüberstehende Lemminge prallen beide ab. Basis: Snapshot der Positionen zu Tick-Beginn (Zwei-Phasen-Bewegung). Spawn verzögert sich wenn Entry-Tile belegt ist. Lemming-Positionen werden **nicht** in `is_tile_walkable()` geprüft – Objekte dürfen unter Lemmingen platziert werden. Siehe story_019.
 6. **Leere TileMapLayer-Zelle = begehbar**, belegte Zelle = Wand
 7. **Rechtsklick entfernt platzierte Objekte** und gibt sie ins Inventar zurück
+
+---
+
+## Bekannte Fallstricke (Lessons Learned)
+
+- **`DirAccess` im Web-Export**: Funktioniert nicht. Immer `preload()` für Ressourcen-Arrays verwenden (betrifft level_definitions, object_definitions, Sound-Dateien).
+- **UIDs in .tscn**: Niemals manuell erfinden. Godot vergibt echte UIDs beim ersten Öffnen im Editor.
+- **`mouse_event.position` vs `.global_position`**: Für Koordinaten-Umrechnung immer `.position` (Screen-Pixel) verwenden, nicht `.global_position`.
+- **Autoload als .tscn registrieren** wenn er AudioStreamPlayer-Kinder hat (nicht als Script).
+- **Designer-Dateien niemals überschreiben**: `dungeon_tiles.tres` und vom Designer bemalte Level-Szenen sind unantastbar.
+- **Shiver/Wobble-Tweens** auf `position.x` (lokal), nicht `global_position` – sonst Konflikt mit Bewegungs-Tweens.
+- **`pivot_offset`** auf Buttons setzen wenn Rotation-Tween verwendet wird (sonst rotiert um obere linke Ecke).
+- **Volume dB ist logarithmisch**: 50% Lautstärke ≈ `-6 dB`, nicht `-50 dB`.
+- **`hole.gd` / PlaceableObject-Scripts niemals `TickManager.tick_happened.disconnect(lemming._on_tick_happened)` aufrufen**: Diese Methode existiert seit der Zwei-Phasen-Refactoring (story_019) nicht mehr auf dem Lemming. Der `state = FALLING/DEAD`-Check in `phase_1_plan()` / `phase_2_commit()` reicht aus. Jede Story die ein neues Objekt einführt oder `lemming.gd` refactort **muss** alle anderen PlaceableObject-Scripts auf veraltete Lemming-Methoden-Referenzen prüfen.
 
 ---
 
