@@ -51,8 +51,7 @@ func _break() -> void:
 
 
 func _kill_lemming(lemming: Lemming) -> void:
-	if TickManager.tick_happened.is_connected(lemming._on_tick_happened):
-		TickManager.tick_happened.disconnect(lemming._on_tick_happened)
+	# state auf FALLING setzen – phase_1_plan/phase_2_commit skippen bei state != ALIVE
 	lemming.state = Enums.LemmingState.FALLING
 	lemming.start_fall_animation()
 
