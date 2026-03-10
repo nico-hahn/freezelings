@@ -31,7 +31,7 @@ position = Vector2(40, 200)
 position = Vector2(40, 104)
 
 [node name="Hole2" parent="DesignerObjectsContainer" index="1" instance=ExtResource("2_vq1pa")]
-position = Vector2(-40, 80)
+position = Vector2(-40, 88)
 
 [node name="Hole3" parent="DesignerObjectsContainer" index="2" instance=ExtResource("2_vq1pa")]
-position = Vector2(120, 80)
+position = Vector2(120, 88)
